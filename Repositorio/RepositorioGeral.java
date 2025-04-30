@@ -53,5 +53,14 @@ public class RepositorioGeral<T extends Entidade> implements Interfaces.IReposit
   public ArrayList<T> pegar_todos() {
       return lista;
   }
+
+  @Override
+  public String toString() {   
+    String mensagem = "";
+    for(Integer i = 0; i < lista.size(); i++){
+      mensagem += lista.get(i).toString() + "\n";
+    }
+    return mensagem;
+  }
   
 }

@@ -17,4 +17,8 @@ public class Receita extends Entidade{
     this.DataCriacao = DataCriacao;
   }
   
+  @Override
+  public String toString() {
+    return "R$ " + this.Valor;
+  }
 }
