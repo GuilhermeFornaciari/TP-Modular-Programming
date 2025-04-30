@@ -1,10 +1,11 @@
+package Entidades;
+
 import java.sql.Date;
 
 import Interfaces.Entidade;
 
 public class Cliente extends Entidade{
-  Integer Id;
-  String Nome;
+  public String Nome;
   String CPF;
   String Email;
   String CEP;
@@ -17,4 +18,8 @@ public class Cliente extends Entidade{
     CEP = cep;
     DataNascimento = data_nascimento;
   } 
+  @Override
+  public String toString() {
+    return this.Nome;
+  }
 }

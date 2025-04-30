@@ -1,3 +1,6 @@
+package Entidades;
+
+
 import java.sql.Date;
 
 import Interfaces.Entidade;

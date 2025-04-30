@@ -5,16 +5,19 @@ import java.util.ArrayList;
 import Interfaces.Entidade;
 import excecoes.NotFoundException;
 
-public class RepositorioGeral implements Interfaces.IRepositorioGeral {
-  private ArrayList<Entidade> lista = new ArrayList<>();
-
+public class RepositorioGeral<T extends Entidade> implements Interfaces.IRepositorioGeral<T> {
+  private ArrayList<T> lista = new ArrayList<>();
+  private Integer IdCounter = 0;  
   @Override
-  public void criar(Entidade entidade) {  
+  public Integer criar(T entidade) {
+    entidade.Id = this.IdCounter;
     lista.add(entidade);
+    this.IdCounter++;
+    return entidade.Id;
   }
 
   @Override
-  public void atualizar(Entidade entidade) throws NotFoundException {
+  public void atualizar(T entidade) throws NotFoundException {
     for(Integer i = 0; i < lista.size(); i++){
       if (lista.get(i).Id == entidade.Id){
         lista.remove(i);
@@ -25,7 +28,7 @@ public class RepositorioGeral implements Interfaces.IRepositorioGeral {
   }
 
   @Override
-  public void deletar(Entidade entidade) throws NotFoundException{
+  public void deletar(T entidade) throws NotFoundException{
     for(Integer i = 0; i < lista.size(); i++){
       if (lista.get(i).Id == entidade.Id){
         lista.remove(i);
@@ -37,7 +40,7 @@ public class RepositorioGeral implements Interfaces.IRepositorioGeral {
   }
 
   @Override
-  public Entidade pegar_um(int id) throws NotFoundException {
+  public T pegar_um(int id) throws NotFoundException {
     for(Integer i = 0; i < lista.size(); i++){
       if (lista.get(i).Id == id){
         return lista.get(i);
@@ -47,7 +50,7 @@ public class RepositorioGeral implements Interfaces.IRepositorioGeral {
   }
 
   @Override
-  public ArrayList<Entidade> pegar_todos() {
+  public ArrayList<T> pegar_todos() {
       return lista;
   }
   
