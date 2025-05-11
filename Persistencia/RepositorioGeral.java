@@ -3,7 +3,7 @@ package Persistencia;
  import java.util.ArrayList;
 
 import Modelo.Entidade;
-import Visao.NotFoundException;
+import Modelo.NotFoundException;
  
  public class RepositorioGeral<T extends Entidade> implements Persistencia.IRepositorioGeral<T> {
    private ArrayList<T> lista = new ArrayList<>();

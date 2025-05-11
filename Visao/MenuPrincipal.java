@@ -5,13 +5,12 @@ import java.util.Scanner;
 import Modelo.Cliente;
 import Modelo.Despesa;
 import Modelo.Receita;
+import Persistencia.BancoDeDados;
 import Persistencia.RepositorioGeral;
 
 public class MenuPrincipal {
     public static void exibirMenuPrincipal(
-        RepositorioGeral<Cliente> clienteRepo,
-        RepositorioGeral<Receita> receitaRepo,
-        RepositorioGeral<Despesa> despesaRepo
+        BancoDeDados banco
     ) {
         Scanner scanner = new Scanner(System.in);
         int opcao;
@@ -26,9 +25,9 @@ public class MenuPrincipal {
             opcao = lerInteiro(scanner);
 
             switch (opcao) {
-                case 1 -> MenuCliente.exibirMenuCliente(scanner, clienteRepo);
-                case 2 -> MenuReceita.exibirMenuReceita(scanner, receitaRepo);
-                case 3 -> MenuDespesa.exibirMenuDespesa(scanner, despesaRepo);
+                case 1 -> MenuCliente.exibirMenuCliente(scanner, banco.cliente);
+                case 2 -> MenuReceita.exibirMenuReceita(scanner, banco.receita);
+                case 3 -> MenuDespesa.exibirMenuDespesa(scanner, banco.despesa);
                 case 0 -> System.out.println("Saindo do programa...");
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }

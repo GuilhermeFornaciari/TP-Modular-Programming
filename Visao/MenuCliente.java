@@ -3,10 +3,11 @@ package Visao;
 import java.util.Scanner;
 
 import Modelo.Cliente;
+import Persistencia.IRepositorioGeral;
 import Persistencia.RepositorioGeral;
 
 public class MenuCliente {
-    public static void exibirMenuCliente(Scanner scanner, RepositorioGeral<Cliente> clienteRepo) {
+    public static void exibirMenuCliente(Scanner scanner, IRepositorioGeral<Cliente> clienteRepo) {
         int opcao;
 
         do {
@@ -32,7 +33,7 @@ public class MenuCliente {
         } while (opcao != 0);
     }
 
-    private static void inserirCliente(Scanner scanner, RepositorioGeral<Cliente> clienteRepo) {
+    private static void inserirCliente(Scanner scanner, IRepositorioGeral<Cliente> clienteRepo) {
         try {
             System.out.print("Nome: ");
             String nome = scanner.nextLine();
@@ -53,7 +54,7 @@ public class MenuCliente {
         }
     }
 
-    private static void alterarCliente(Scanner scanner, RepositorioGeral<Cliente> clienteRepo) {
+    private static void alterarCliente(Scanner scanner, IRepositorioGeral<Cliente> clienteRepo) {
         try {
             System.out.print("ID do Cliente para alterar: ");
             Integer id = scanner.nextInt();
@@ -76,7 +77,7 @@ public class MenuCliente {
         }
     }
 
-    private static void apagarCliente(Scanner scanner, RepositorioGeral<Cliente> clienteRepo) {
+    private static void apagarCliente(Scanner scanner, IRepositorioGeral<Cliente> clienteRepo) {
         try {
             System.out.print("ID do Cliente para apagar: ");
             Integer id = scanner.nextInt();
@@ -89,7 +90,7 @@ public class MenuCliente {
         }
     }
 
-    private static void visualizarClientePorId(Scanner scanner, RepositorioGeral<Cliente> clienteRepo) {
+    private static void visualizarClientePorId(Scanner scanner, IRepositorioGeral<Cliente> clienteRepo) {
         try {
             System.out.print("ID do Cliente para visualizar: ");
             Integer id = scanner.nextInt();
@@ -107,7 +108,7 @@ public class MenuCliente {
         }
     }
 
-    private static void visualizarTodosClientes(RepositorioGeral<Cliente> clienteRepo) {
+    private static void visualizarTodosClientes(IRepositorioGeral<Cliente> clienteRepo) {
         System.out.println("\nTodos os Clientes:");
         System.out.println(clienteRepo);
     }

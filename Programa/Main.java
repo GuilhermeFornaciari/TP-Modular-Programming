@@ -2,15 +2,13 @@ package Programa;
 import Modelo.Cliente;
 import Modelo.Despesa;
 import Modelo.Receita;
+import Persistencia.BancoDeDados;
 import Persistencia.RepositorioGeral;
 import Visao.MenuPrincipal;
 
 public class Main {
     public static void main(String[] args) {
-        // Criação dos repositórios
-        RepositorioGeral<Cliente> clienteRepo = new RepositorioGeral<>();
-        RepositorioGeral<Receita> receitaRepo = new RepositorioGeral<>();
-        RepositorioGeral<Despesa> despesaRepo = new RepositorioGeral<>();
+        BancoDeDados banco = new BancoDeDados();
 
         Cliente cliente = new Cliente(
             "Bruno",
@@ -19,7 +17,7 @@ public class Main {
             "123456789",
             java.sql.Date.valueOf("2004-07-13")
         );
-        Integer clienteId = clienteRepo.criar(cliente);
+        Integer clienteId = banco.cliente.criar(cliente);
         System.out.println("Cliente criado com sucesso! ID: " + clienteId);
 
         Receita receita = new Receita(
@@ -29,7 +27,7 @@ public class Main {
             java.sql.Date.valueOf("2025-05-03"),
             clienteId
         );
-        Integer receitaId = receitaRepo.criar(receita);
+        Integer receitaId = banco.receita.criar(receita);
         System.out.println("Receita criada com sucesso! ID: " + receitaId);
 
         Despesa despesa = new Despesa(
@@ -38,10 +36,10 @@ public class Main {
             java.sql.Date.valueOf("2025-05-03"),
             java.sql.Date.valueOf("2025-05-13")
         );
-        Integer despesaId = despesaRepo.criar(despesa);
+        Integer despesaId = banco.despesa.criar(despesa);
         System.out.println("Despesa criada com sucesso! ID: " + despesaId);
 
         // Exibindo o menu principal
-        MenuPrincipal.exibirMenuPrincipal(clienteRepo, receitaRepo, despesaRepo);
+        MenuPrincipal.exibirMenuPrincipal(banco);
     }
 }

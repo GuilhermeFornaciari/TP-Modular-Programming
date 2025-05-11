@@ -3,10 +3,11 @@ package Visao;
 import java.util.Scanner;
 
 import Modelo.Receita;
+import Persistencia.IRepositorioGeral;
 import Persistencia.RepositorioGeral;
 
 public class MenuReceita {
-    public static void exibirMenuReceita(Scanner scanner, RepositorioGeral<Receita> receitaRepo) {
+    public static void exibirMenuReceita(Scanner scanner, IRepositorioGeral<Receita> receitaRepo) {
         int opcao;
         do {
             System.out.println("\n=== Menu Receita ===");
@@ -31,7 +32,7 @@ public class MenuReceita {
         } while (opcao != 0);
     }
 
-    private static void inserirReceita(Scanner scanner, RepositorioGeral<Receita> receitaRepo) {
+    private static void inserirReceita(Scanner scanner, IRepositorioGeral<Receita> receitaRepo) {
         try {
             System.out.print("Valor: ");
             Float valor = scanner.nextFloat();
@@ -53,7 +54,7 @@ public class MenuReceita {
         }
     }
 
-    private static void alterarReceita(Scanner scanner, RepositorioGeral<Receita> receitaRepo) {
+    private static void alterarReceita(Scanner scanner, IRepositorioGeral<Receita> receitaRepo) {
         try {
             System.out.print("ID da Receita para alterar: ");
             Integer id = scanner.nextInt();
@@ -76,7 +77,7 @@ public class MenuReceita {
         }
     }
 
-    private static void apagarReceita(Scanner scanner, RepositorioGeral<Receita> receitaRepo) {
+    private static void apagarReceita(Scanner scanner, IRepositorioGeral<Receita> receitaRepo) {
         try {
             System.out.print("ID da Receita para apagar: ");
             Integer id = scanner.nextInt();
@@ -89,7 +90,7 @@ public class MenuReceita {
         }
     }
 
-    private static void visualizarReceitaPorId(Scanner scanner, RepositorioGeral<Receita> receitaRepo) {
+    private static void visualizarReceitaPorId(Scanner scanner, IRepositorioGeral<Receita> receitaRepo) {
         try {
             System.out.print("ID da Receita: ");
             Integer id = scanner.nextInt();
@@ -106,7 +107,7 @@ public class MenuReceita {
         }
     }
 
-    private static void visualizarTodasReceitas(RepositorioGeral<Receita> receitaRepo) {
+    private static void visualizarTodasReceitas(IRepositorioGeral<Receita> receitaRepo) {
         System.out.println("\nTodas as Receitas:");
         System.out.println(receitaRepo);
     }

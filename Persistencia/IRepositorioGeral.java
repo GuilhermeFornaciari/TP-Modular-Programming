@@ -3,7 +3,7 @@ package Persistencia;
 import java.util.ArrayList;
 
 import Modelo.Entidade;
-import Visao.NotFoundException;
+import Modelo.NotFoundException;
 
 public interface IRepositorioGeral<T extends Entidade> {
   Integer criar(T entidade);

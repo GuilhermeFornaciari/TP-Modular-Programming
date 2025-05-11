@@ -3,10 +3,11 @@ package Visao;
 import java.util.Scanner;
 
 import Modelo.Despesa;
+import Persistencia.IRepositorioGeral;
 import Persistencia.RepositorioGeral;
 
 public class MenuDespesa {
-    public static void exibirMenuDespesa(Scanner scanner, RepositorioGeral<Despesa> despesaRepo) {
+    public static void exibirMenuDespesa(Scanner scanner, IRepositorioGeral<Despesa> despesaRepo) {
         int opcao;
 
         do {
@@ -32,7 +33,7 @@ public class MenuDespesa {
         } while (opcao != 0);
     }
 
-    private static void inserirDespesa(Scanner scanner, RepositorioGeral<Despesa> despesaRepo) {
+    private static void inserirDespesa(Scanner scanner, IRepositorioGeral<Despesa> despesaRepo) {
         try {
             System.out.print("Valor: ");
             double valor = scanner.nextDouble();
@@ -50,7 +51,7 @@ public class MenuDespesa {
         }
     }
 
-    private static void alterarDespesa(Scanner scanner, RepositorioGeral<Despesa> despesaRepo) {
+    private static void alterarDespesa(Scanner scanner, IRepositorioGeral<Despesa> despesaRepo) {
         try {
             System.out.print("ID da Despesa para alterar: ");
             Integer id = scanner.nextInt();
@@ -70,7 +71,7 @@ public class MenuDespesa {
         }
     }
 
-    private static void apagarDespesa(Scanner scanner, RepositorioGeral<Despesa> despesaRepo) {
+    private static void apagarDespesa(Scanner scanner, IRepositorioGeral<Despesa> despesaRepo) {
         try {
             System.out.print("ID da Despesa para apagar: ");
             Integer id = scanner.nextInt();
@@ -83,7 +84,7 @@ public class MenuDespesa {
         }
     }
 
-    private static void visualizarDespesaPorId(Scanner scanner, RepositorioGeral<Despesa> despesaRepo) {
+    private static void visualizarDespesaPorId(Scanner scanner, IRepositorioGeral<Despesa> despesaRepo) {
         try {
             System.out.print("ID da Despesa para visualizar: ");
             Integer id = scanner.nextInt();
@@ -99,7 +100,7 @@ public class MenuDespesa {
         }
     }
 
-    private static void visualizarTodasDespesas(RepositorioGeral<Despesa> despesaRepo) {
+    private static void visualizarTodasDespesas(IRepositorioGeral<Despesa> despesaRepo) {
         System.out.println("\nTodas as Despesas:");
         System.out.println(despesaRepo);
     }
