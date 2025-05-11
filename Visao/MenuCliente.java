@@ -1,8 +1,9 @@
-package Menus;
+package Visao;
 
-import Entidades.Cliente;
-import Repositorio.RepositorioGeral;
 import java.util.Scanner;
+
+import Modelo.Cliente;
+import Persistencia.RepositorioGeral;
 
 public class MenuCliente {
     public static void exibirMenuCliente(Scanner scanner, RepositorioGeral<Cliente> clienteRepo) {

@@ -1,6 +1,5 @@
-package Entidades;
+package Modelo;
 
-import Interfaces.Entidade;
 import java.sql.Date;
 
 public class Cliente extends Entidade {

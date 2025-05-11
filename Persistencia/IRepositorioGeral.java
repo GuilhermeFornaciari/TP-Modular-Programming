@@ -1,8 +1,9 @@
-package Interfaces;
+package Persistencia;
 
 import java.util.ArrayList;
 
-import excecoes.NotFoundException;
+import Modelo.Entidade;
+import Visao.NotFoundException;
 
 public interface IRepositorioGeral<T extends Entidade> {
   Integer criar(T entidade);

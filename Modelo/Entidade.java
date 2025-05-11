@@ -1,4 +1,4 @@
-package Interfaces;
+package Modelo;
 
 public class Entidade {
   public Integer Id;

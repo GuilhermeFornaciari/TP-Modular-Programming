@@ -1,10 +1,11 @@
-package Menus;
+package Visao;
 
-import Entidades.Cliente;
-import Entidades.Receita;
-import Entidades.Despesa;
-import Repositorio.RepositorioGeral;
 import java.util.Scanner;
+
+import Modelo.Cliente;
+import Modelo.Despesa;
+import Modelo.Receita;
+import Persistencia.RepositorioGeral;
 
 public class MenuPrincipal {
     public static void exibirMenuPrincipal(

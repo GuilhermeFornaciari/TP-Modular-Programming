@@ -1,10 +1,11 @@
-package Repositorio;
+package Persistencia;
  
- import Interfaces.Entidade;
- import excecoes.NotFoundException;
  import java.util.ArrayList;
+
+import Modelo.Entidade;
+import Visao.NotFoundException;
  
- public class RepositorioGeral<T extends Entidade> implements Interfaces.IRepositorioGeral<T> {
+ public class RepositorioGeral<T extends Entidade> implements Persistencia.IRepositorioGeral<T> {
    private ArrayList<T> lista = new ArrayList<>();
    private Integer IdCounter = 0;  
    @Override

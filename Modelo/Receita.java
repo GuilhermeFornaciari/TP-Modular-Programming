@@ -1,18 +1,19 @@
-package Entidades;
+package Modelo;
 
-import Interfaces.Entidade;
 import java.sql.Date;
 
-public class Despesa extends Entidade {
+public class Receita extends Entidade {
     private Float Valor;
     private Date DataPagamento;
     private Date DataCriacao;
+    private Integer IdCliente;
 
-    public Despesa(Integer Id, Float Valor, Date DataPagamento, Date DataCriacao) {
+    public Receita(Integer Id, Float Valor, Date DataPagamento, Date DataCriacao, Integer IdCliente) {
         this.Id = Id;
         this.Valor = Valor;
         this.DataPagamento = DataPagamento;
         this.DataCriacao = DataCriacao;
+        this.IdCliente = IdCliente;
     }
 
     public Float getValor() {
@@ -39,13 +40,21 @@ public class Despesa extends Entidade {
         DataCriacao = dataCriacao;
     }
 
+    public Integer getIdCliente() {
+        return IdCliente;
+    }
+
+    public void setIdCliente(Integer idCliente) {
+        IdCliente = idCliente;
+    }
+
     @Override
     public String toString() {
         return "ID: " + this.getId() + "\n" +
         "Valor: " + this.getValor() + "\n" +
         "Data de Pagamento: " + this.getDataPagamento() + "\n" +
         "Data de Criação: " + this.getDataCriacao() + "\n" +
+        "ID do cliente" + this.IdCliente + "\n" + 
         "--------------------------------------------------";
-
     }
 }

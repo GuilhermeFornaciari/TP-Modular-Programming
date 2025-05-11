@@ -1,8 +1,9 @@
-package Menus;
+package Visao;
 
-import Entidades.Despesa;
-import Repositorio.RepositorioGeral;
 import java.util.Scanner;
+
+import Modelo.Despesa;
+import Persistencia.RepositorioGeral;
 
 public class MenuDespesa {
     public static void exibirMenuDespesa(Scanner scanner, RepositorioGeral<Despesa> despesaRepo) {

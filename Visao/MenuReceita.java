@@ -1,8 +1,9 @@
-package Menus;
+package Visao;
 
-import Entidades.Receita;
-import Repositorio.RepositorioGeral;
 import java.util.Scanner;
+
+import Modelo.Receita;
+import Persistencia.RepositorioGeral;
 
 public class MenuReceita {
     public static void exibirMenuReceita(Scanner scanner, RepositorioGeral<Receita> receitaRepo) {
