@@ -6,12 +6,14 @@ public class Despesa extends Entidade {
     private Float Valor;
     private Date DataPagamento;
     private Date DataCriacao;
+    private Integer IdMovimentoCaixa;
 
-    public Despesa(Integer Id, Float Valor, Date DataPagamento, Date DataCriacao) {
+    public Despesa(Integer Id, Float Valor, Date DataPagamento, Date DataCriacao, Integer IdMovimentoCaixa) {
         this.Id = Id;
         this.Valor = Valor;
         this.DataPagamento = DataPagamento;
         this.DataCriacao = DataCriacao;
+        this.IdMovimentoCaixa = IdMovimentoCaixa;
     }
 
     public Float getValor() {
@@ -38,13 +40,21 @@ public class Despesa extends Entidade {
         DataCriacao = dataCriacao;
     }
 
+    public Integer getIdMovimentoCaixa() {
+        return IdMovimentoCaixa;
+    }
+
+    public void setIdMovimentoCaixa(Integer idMovimentoCaixa) {
+        IdMovimentoCaixa = idMovimentoCaixa;
+    }
+
     @Override
     public String toString() {
         return "ID: " + this.getId() + "\n" +
         "Valor: " + this.getValor() + "\n" +
         "Data de Pagamento: " + this.getDataPagamento() + "\n" +
         "Data de Criação: " + this.getDataCriacao() + "\n" +
+        "ID do movimento de caixa" + this.IdMovimentoCaixa + "\n" + 
         "--------------------------------------------------";
-
     }
 }

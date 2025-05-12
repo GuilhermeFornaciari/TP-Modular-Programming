@@ -7,11 +7,13 @@ public class MovimentoCaixa extends Entidade {
     private Date DataCriacao;
     private ArrayList<Despesa> despesas;
     private ArrayList<Receita> receitas;
+    private Integer IdCliente;
     
 
-    public MovimentoCaixa(Integer Id, Date DataCriacao) {
+    public MovimentoCaixa(Integer Id, Date DataCriacao, Integer IdCliente) {
         this.Id = Id;
         this.DataCriacao = DataCriacao;
+        this.IdCliente = IdCliente;
         this.despesas = new ArrayList<Despesa>();
         this.receitas = new ArrayList<Receita>();
     }
@@ -23,6 +25,15 @@ public class MovimentoCaixa extends Entidade {
     public void setDataCriacao(Date dataCriacao) {
         DataCriacao = dataCriacao;
     }
+
+    public Integer getIdCliente() {
+        return IdCliente;
+    }
+
+    public void setIdCliente(Integer idCliente) {
+        IdCliente = idCliente;
+    }
+    
 
     public void adicionarReceita(Receita receita) {
         receitas.add(receita);

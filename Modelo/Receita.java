@@ -6,14 +6,14 @@ public class Receita extends Entidade {
     private Float Valor;
     private Date DataPagamento;
     private Date DataCriacao;
-    private Integer IdCliente;
+    private Integer IdMovimentoCaixa;
 
-    public Receita(Integer Id, Float Valor, Date DataPagamento, Date DataCriacao, Integer IdCliente) {
+    public Receita(Integer Id, Float Valor, Date DataPagamento, Date DataCriacao, Integer IdMovimentoCaixa) {
         this.Id = Id;
         this.Valor = Valor;
         this.DataPagamento = DataPagamento;
         this.DataCriacao = DataCriacao;
-        this.IdCliente = IdCliente;
+        this.IdMovimentoCaixa = IdMovimentoCaixa;
     }
 
     public Float getValor() {
@@ -40,12 +40,12 @@ public class Receita extends Entidade {
         DataCriacao = dataCriacao;
     }
 
-    public Integer getIdCliente() {
-        return IdCliente;
+    public Integer getIdMovimentoCaixa() {
+        return IdMovimentoCaixa;
     }
 
-    public void setIdCliente(Integer idCliente) {
-        IdCliente = idCliente;
+    public void setIdMovimentoCaixa(Integer idMovimentoCaixa) {
+        IdMovimentoCaixa = idMovimentoCaixa;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class Receita extends Entidade {
         "Valor: " + this.getValor() + "\n" +
         "Data de Pagamento: " + this.getDataPagamento() + "\n" +
         "Data de Criação: " + this.getDataCriacao() + "\n" +
-        "ID do cliente" + this.IdCliente + "\n" + 
+        "ID do movimento de caixa" + this.IdMovimentoCaixa + "\n" + 
         "--------------------------------------------------";
     }
 }
