@@ -1,11 +1,11 @@
-package Persistencia;
+package Programa.Persistencia;
  
  import java.util.ArrayList;
 
-import Modelo.Entidade;
-import Modelo.NotFoundException;
+import Programa.Modelo.Entidade;
+import Programa.Modelo.NotFoundException;
  
- public class RepositorioGeral<T extends Entidade> implements Persistencia.IRepositorioGeral<T> {
+ public class RepositorioGeral<T extends Entidade> implements Programa.Persistencia.IRepositorioGeral<T> {
    private ArrayList<T> lista = new ArrayList<>();
    private Integer IdCounter = 0;  
    @Override

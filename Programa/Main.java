@@ -1,10 +1,10 @@
 package Programa;
-import Modelo.Cliente;
-import Modelo.Despesa;
-import Modelo.MovimentoCaixa;
-import Modelo.Receita;
-import Persistencia.BancoDeDados;
-import Visao.MenuPrincipal;
+import Programa.Modelo.Cliente;
+import Programa.Modelo.Despesa;
+import Programa.Modelo.MovimentoCaixa;
+import Programa.Modelo.Receita;
+import Programa.Persistencia.BancoDeDados;
+import Programa.Visao.MenuPrincipal;
 
 public class Main {
     public static void main(String[] args) {

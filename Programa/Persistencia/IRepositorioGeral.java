@@ -1,9 +1,9 @@
-package Persistencia;
+package Programa.Persistencia;
 
 import java.util.ArrayList;
 
-import Modelo.Entidade;
-import Modelo.NotFoundException;
+import Programa.Modelo.Entidade;
+import Programa.Modelo.NotFoundException;
 
 public interface IRepositorioGeral<T extends Entidade> {
   Integer criar(T entidade);
