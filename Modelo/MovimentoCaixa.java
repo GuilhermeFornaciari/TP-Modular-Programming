@@ -57,7 +57,8 @@ public class MovimentoCaixa extends Entidade {
         String receitas = this.receitas.toString();
         return "ID: " + this.getId() + "\n" +
         "Data de Criação: " + this.getDataCriacao() + "\n" +
-        "Receitas: " + receitas + "\nDespesas: " + despesas +
+        "Id do cliente: " + IdCliente +
+        "\nReceitas: " + receitas + "\nDespesas: " + despesas +
         "\n####################################################";
     }
 }

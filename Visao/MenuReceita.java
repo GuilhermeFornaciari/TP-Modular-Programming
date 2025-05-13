@@ -41,12 +41,12 @@ public class MenuReceita {
             String dataCriacao = scanner.nextLine();
             System.out.print("Data de Pagamento (aaaa-mm-dd): ");
             String dataPagamento = scanner.nextLine();
-            System.out.print("ID do Cliente: ");
+            System.out.print("ID do movimento de caixa: ");
             Integer idCliente = scanner.nextInt();
             scanner.nextLine(); // Limpa o buffer
 
             Receita receita = new Receita(null, valor, java.sql.Date.valueOf(dataPagamento), java.sql.Date.valueOf(dataCriacao), idCliente);
-            receita.setIdCliente(idCliente);
+            receita.setIdMovimentoCaixa(idCliente);
             Integer id = receitaRepo.criar(receita);
             System.out.println("Receita inserida com sucesso! ID da Receita: " + id);
         } catch (Exception e) {
@@ -67,8 +67,8 @@ public class MenuReceita {
             receita.setDataCriacao(java.sql.Date.valueOf(scanner.nextLine()));
             System.out.print("Nova Data de Pagamento (aaaa-mm-dd): ");
             receita.setDataPagamento(java.sql.Date.valueOf(scanner.nextLine()));
-            System.out.print("Novo ID do Cliente: ");
-            receita.setIdCliente(scanner.nextInt());
+            System.out.print("Novo ID do Movimento de caixa: ");
+            receita.setIdMovimentoCaixa(scanner.nextInt());
             scanner.nextLine(); // Limpa o buffer
             receitaRepo.atualizar(receita);
             System.out.println("Receita alterada com sucesso!");
@@ -101,7 +101,7 @@ public class MenuReceita {
             System.out.println("Valor: " + receita.getValor());
             System.out.println("Data de Criação: " + receita.getDataCriacao());
             System.out.println("Data de Pagamento: " + receita.getDataPagamento());
-            System.out.println("ID do Cliente: " + receita.getIdCliente());
+            System.out.println("ID do Movimento de Caixa: " + receita.getIdMovimentoCaixa());
         } catch (Exception e) {
             System.out.println("Erro ao visualizar receita");
         }

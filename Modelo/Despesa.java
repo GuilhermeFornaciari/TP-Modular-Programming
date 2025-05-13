@@ -54,7 +54,6 @@ public class Despesa extends Entidade {
         "Valor: " + this.getValor() + "\n" +
         "Data de Pagamento: " + this.getDataPagamento() + "\n" +
         "Data de Criação: " + this.getDataCriacao() + "\n" +
-        "ID do movimento de caixa" + this.IdMovimentoCaixa + "\n" + 
-        "--------------------------------------------------";
+        "ID do movimento de caixa: " + this.IdMovimentoCaixa + "\n";
     }
 }

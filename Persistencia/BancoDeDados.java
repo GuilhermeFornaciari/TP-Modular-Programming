@@ -14,6 +14,6 @@ public class BancoDeDados {
     cliente = new RepositorioGeral<Cliente>();
     despesa = new RepositorioGeral<Despesa>();
     receita = new RepositorioGeral<Receita>();
-    movimentoCaixa = new RepositorioGeral<>();
+    movimentoCaixa = new RepositorioGeral<MovimentoCaixa>();
   }
 }

@@ -42,8 +42,10 @@ public class MenuDespesa {
             String dataPagamento = scanner.nextLine();
             System.out.print("Data de Criação (aaaa-mm-dd): ");
             String dataCriacao = scanner.nextLine();
+            System.out.print("ID do movimento de caixa: ");
+            Integer idMovimentoCaixa = scanner.nextInt();
 
-            Despesa despesa = new Despesa(null, (float) valor, java.sql.Date.valueOf(dataPagamento), java.sql.Date.valueOf(dataCriacao));
+            Despesa despesa = new Despesa(null, (float) valor, java.sql.Date.valueOf(dataPagamento), java.sql.Date.valueOf(dataCriacao),idMovimentoCaixa);
             Integer id = despesaRepo.criar(despesa);
             System.out.println("Despesa inserida com sucesso! ID da Despesa: " + id);
         } catch (Exception e) {
@@ -64,6 +66,9 @@ public class MenuDespesa {
             despesa.setDataPagamento(java.sql.Date.valueOf(scanner.nextLine()));
             System.out.print("Nova Data de Criação (aaaa-mm-dd): ");
             despesa.setDataCriacao(java.sql.Date.valueOf(scanner.nextLine()));
+            System.out.print("Novo ID do movimento de caixa: ");
+            Integer idMovimentoCaixa = scanner.nextInt();
+            despesa.setIdMovimentoCaixa(idMovimentoCaixa);
             despesaRepo.atualizar(despesa);
             System.out.println("Despesa alterada com sucesso!");
         } catch (Exception e) {

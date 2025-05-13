@@ -53,8 +53,8 @@ public class Receita extends Entidade {
         return "ID: " + this.getId() + "\n" +
         "Valor: " + this.getValor() + "\n" +
         "Data de Pagamento: " + this.getDataPagamento() + "\n" +
-        "Data de Criação: " + this.getDataCriacao() + "\n" +
-        "ID do movimento de caixa" + this.IdMovimentoCaixa + "\n" + 
-        "--------------------------------------------------";
+        "Data de Criação: " + this.getDataCriacao() + "\n" +     
+        "ID do movimento de caixa: " + this.IdMovimentoCaixa + "\n";
+
     }
 }

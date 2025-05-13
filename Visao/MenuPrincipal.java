@@ -24,7 +24,7 @@ public class MenuPrincipal {
                 case 1 -> MenuCliente.exibirMenuCliente(scanner, banco.cliente);
                 case 2 -> MenuReceita.exibirMenuReceita(scanner, banco.receita);
                 case 3 -> MenuDespesa.exibirMenuDespesa(scanner, banco.despesa);
-                case 4 -> MenuMovimentoCaixa.exibirMenuMovimentoCaixa(scanner, banco.movimentoCaixa, banco.receita, banco.despesa);
+                case 4 -> MenuMovimentoCaixa.exibirMenuMovimentoCaixa(scanner, banco);
                 case 0 -> System.out.println("Saindo do programa...");
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }

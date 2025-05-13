@@ -34,14 +34,16 @@ public class Main {
             0,
             1000.00f,
             java.sql.Date.valueOf("2025-05-03"),
-            java.sql.Date.valueOf("2025-05-13")
+            java.sql.Date.valueOf("2025-05-13"),
+            0
         );
         Integer despesaId = banco.despesa.criar(despesa);
         System.out.println("Despesa criada com sucesso! ID: " + despesaId);
 
         MovimentoCaixa movimentoCaixa = new MovimentoCaixa(
             null,
-            java.sql.Date.valueOf("2025-05-13")
+            java.sql.Date.valueOf("2025-05-13"),
+            0
         );
         Integer movimentoId = banco.movimentoCaixa.criar(movimentoCaixa);
         System.out.println("Movimentação de Caixa criada com sucesso! ID: " + movimentoId);
