@@ -10,16 +10,16 @@ import Programa.Modelo.NotFoundException;
    private Integer IdCounter = 0;  
    @Override
    public Integer criar(T entidade) {
-     entidade.Id = this.IdCounter;
+     entidade.setId(IdCounter);
      lista.add(entidade);
      this.IdCounter++;
-     return entidade.Id;
+     return entidade.getId();
    }
  
    @Override
    public void atualizar(T entidade) throws NotFoundException {
      for(Integer i = 0; i < lista.size(); i++){
-       if (lista.get(i).getId().equals(entidade.Id)){
+       if (lista.get(i).getId().equals(entidade.getId())){
         lista.set(i, entidade);
         return;
        }
@@ -40,7 +40,7 @@ import Programa.Modelo.NotFoundException;
    @Override
    public T pegar_um(int id) throws NotFoundException {
      for(Integer i = 0; i < lista.size(); i++){
-       if (lista.get(i).Id == id){
+       if (lista.get(i).getId() == id){
          return lista.get(i);
        }
      }

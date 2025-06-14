@@ -2,7 +2,7 @@ package Programa.Visao;
 
 import java.util.Scanner;
 
-import Programa.Modelo.Despesa;
+import Programa.Modelo.TipoMovimento;
 import Programa.Modelo.MovimentoCaixa;
 import Programa.Modelo.Receita;
 import Programa.Persistencia.BancoDeDados;
@@ -82,7 +82,7 @@ public class MenuMovimentoCaixa {
             System.out.print("ID da Despesa: ");
             Integer idDespesa = scanner.nextInt();
             scanner.nextLine(); // Limpa o buffer
-            Despesa despesa = banco.despesa.pegar_um(idDespesa);
+            TipoMovimento despesa = banco.despesa.pegar_um(idDespesa);
             if (despesa.getIdMovimentoCaixa().equals(movimento.Id)){
                 movimento.adicionarDespesa(despesa);
                 System.out.println("Despesa adicionada à movimentação com sucesso!");

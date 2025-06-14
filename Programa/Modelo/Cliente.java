@@ -9,7 +9,8 @@ public class Cliente extends Entidade {
     private String CEP;
     private Date DataNascimento;
 
-    public Cliente(String nome, String cpf, String email, String cep, Date data_nascimento) {
+    public Cliente(Integer id,String nome, String cpf, String email, String cep, Date data_nascimento) {
+        super(id);
         this.Nome = nome;
         this.CPF = cpf;
         this.Email = email;
@@ -59,13 +60,12 @@ public class Cliente extends Entidade {
 
     @Override
     public String toString() {
-        return "ID: " + this.getId() + "\n" +
+        return super.toString() +
         "Nome: " + this.getNome() + "\n" +
         "CPF: " + this.getCPF() + "\n" +
         "Email: " + this.getEmail() + "\n" +
         "CEP: " + this.getCEP() + "\n" +
-        "Data de Nascimento: " + this.getDataNascimento() + "\n" +
-        "--------------------------------------------------";
+        "Data de Nascimento: " + this.getDataNascimento() + "\n";
 
     }
 }

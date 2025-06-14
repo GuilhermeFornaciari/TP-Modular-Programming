@@ -1,18 +1,10 @@
 package Programa.Modelo;
-
 public abstract class Entidade {
-  public Integer Id;
-
-      public Integer getId() {
-        return Id;
-    }
-
-    public void setId(Integer id) {
-        Id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "Porque vc tá printando classe abstrata?";
-    }
+  private Integer id; 
+  public Entidade(Integer id) { this.id = id; } 
+  public Integer getId() { return id; }
+  public void setId(Integer id) { this.id = id; }
+  
+  @Override
+  public String toString() { return "Id: " + id + "\n"; }
 }
