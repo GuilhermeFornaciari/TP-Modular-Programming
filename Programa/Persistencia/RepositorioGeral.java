@@ -1,17 +1,19 @@
 package Programa.Persistencia;
  
- import java.util.ArrayList;
-
-import Programa.Modelo.Entidade;
+ import Programa.Modelo.Entidade;
 import Programa.Modelo.NotFoundException;
+import Programa.Visao.ObservableAction;
+import Programa.Visao.Publisher;
+import java.util.ArrayList;
  
- public class RepositorioGeral<T extends Entidade> implements Programa.Persistencia.IRepositorioGeral<T> {
+ public class RepositorioGeral<T extends Entidade> implements Programa.Persistencia.IRepositorioGeral<T>, Publisher<T> {
    private ArrayList<T> lista = new ArrayList<>();
    private Integer IdCounter = 0;  
    @Override
    public Integer criar(T entidade) {
      entidade.setId(IdCounter);
      lista.add(entidade);
+     notifySubscribers(ObservableAction.CREATE);
      this.IdCounter++;
      return entidade.getId();
    }
@@ -21,6 +23,7 @@ import Programa.Modelo.NotFoundException;
      for(Integer i = 0; i < lista.size(); i++){
        if (lista.get(i).getId().equals(entidade.getId())){
         lista.set(i, entidade);
+        notifySubscribers(ObservableAction.UPDATE);
         return;
        }
      }
@@ -31,6 +34,7 @@ import Programa.Modelo.NotFoundException;
        for (int i = 0; i < lista.size(); i++) {
            if (lista.get(i).getId().equals(entidade.getId())) { // Usando getId para comparar
                lista.remove(i);
+               notifySubscribers(ObservableAction.DELETE);
                return;
            }
        }

@@ -17,6 +17,14 @@ public class Cliente extends Entidade {
         this.CEP = cep;
         this.DataNascimento = data_nascimento;
     }
+    public Cliente(String nome, String cpf, String email, String cep, Date data_nascimento) {
+      super(0);
+      this.Nome = nome;
+      this.CPF = cpf;
+      this.Email = email;
+      this.CEP = cep;
+      this.DataNascimento = data_nascimento;
+    }
 
     public String getNome() {
         return Nome;

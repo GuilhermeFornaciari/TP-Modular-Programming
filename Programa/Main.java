@@ -5,6 +5,7 @@ import Programa.Modelo.MovimentoCaixa;
 import Programa.Modelo.TipoDespesaReceita;
 import Programa.Modelo.TipoTransacao;
 import Programa.Persistencia.BancoDeDados;
+import Programa.Visao.MainLayout;
 
 public class Main {
     public static void main(String[] args) {
@@ -35,6 +36,7 @@ public class Main {
         }
         catch (Exception e){
         }
+        new MainLayout(banco).setVisible(true);
 
     }
 }
