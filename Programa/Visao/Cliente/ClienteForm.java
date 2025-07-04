@@ -1,7 +1,6 @@
 package Programa.Visao.Cliente;
 
 import Programa.Modelo.Cliente;
-import Programa.Visao.ObservableAction;
 import Programa.Visao.Publisher;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -26,8 +25,6 @@ public class ClienteForm extends JPanel implements Publisher<Cliente>, ActionLis
   JLabel statusLabel;
 
   JButton saveButton;
-
-  Cliente data;
 
   public ClienteForm() {
     super();
@@ -114,7 +111,6 @@ public class ClienteForm extends JPanel implements Publisher<Cliente>, ActionLis
     try {
       SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
       nasc = new Date(sdf.parse(nascField.getText()).getTime());
-      data = new Cliente(nome, cpf, email, cep, nasc);
     } catch (Exception e) {
       System.err.println("Erro ao converter data: " + e.getMessage() + nascField.getText());
     }
@@ -124,7 +120,6 @@ public class ClienteForm extends JPanel implements Publisher<Cliente>, ActionLis
   public void actionPerformed(ActionEvent e) {
     createClienteFromForm();
     if (e.getSource() == saveButton) {
-      this.notifyObservers(data, ObservableAction.CREATE);
     }
   }
 

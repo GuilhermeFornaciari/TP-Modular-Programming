@@ -25,18 +25,19 @@ public class ClienteScreen extends JPanel implements Subscriber<Cliente> {
   
     this.setLayout(new BorderLayout());
     TableConfig tableConfig = new TableConfig();
-    tableConfig.addColumnConfig(new TableColumnConfig("Nome", 0.2));
-    tableConfig.addColumnConfig(new TableColumnConfig("CPF", 0.2));
-    tableConfig.addColumnConfig(new TableColumnConfig("Email", 0.2));
-    tableConfig.addColumnConfig(new TableColumnConfig("CEP", 0.2));
-    tableConfig.addColumnConfig(new TableColumnConfig("Nascimento", 0.2));
+    ClienteList clienteListCm = new ClienteList(db.cliente);
+    // tableConfig.addColumnConfig(new TableColumnConfig("Nome", 0.2));
+    // tableConfig.addColumnConfig(new TableColumnConfig("CPF", 0.2));
+    // tableConfig.addColumnConfig(new TableColumnConfig("Email", 0.2));
+    // tableConfig.addColumnConfig(new TableColumnConfig("CEP", 0.2));
+    // tableConfig.addColumnConfig(new TableColumnConfig("Nascimento", 0.2));
     
     clienteList = new CustomList(tableConfig);
     clienteForm = new ClienteForm();
     ccForm = new ClienteFormCm(db.cliente);
     
-    add(ccForm, BorderLayout.NORTH);
-    add(clienteList, BorderLayout.CENTER);
+    // add(ccForm, BorderLayout.NORTH);
+    add(clienteListCm, BorderLayout.CENTER);
     
   }
 
