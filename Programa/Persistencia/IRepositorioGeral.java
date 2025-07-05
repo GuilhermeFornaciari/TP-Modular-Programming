@@ -2,9 +2,11 @@ package Programa.Persistencia;
 
 import Programa.Modelo.Entidade;
 import Programa.Modelo.NotFoundException;
+import Programa.Visao.Publisher;
+
 import java.util.ArrayList;
 
-public interface IRepositorioGeral<T extends Entidade> {
+public interface IRepositorioGeral<T extends Entidade> extends Publisher<T> {
   Integer criar(T entidade);
   void atualizar(T entidade) throws NotFoundException;
   void deletar(T entidade) throws NotFoundException;

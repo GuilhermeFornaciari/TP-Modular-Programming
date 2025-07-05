@@ -1,26 +1,8 @@
-package Programa.Modelo;
+package Programa.Visao;
 
 import java.lang.reflect.Field;
 
-public abstract class Entidade {
-  private Integer id;
-
-  public Entidade(Integer id) {
-    this.id = id;
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  @Override
-  public String toString() {
-    return "Id: " + id + "\n";
-  }
+public class BaseBuilder {
 
   public Object getProperty(String propertyName) {
     try {
@@ -32,4 +14,5 @@ public abstract class Entidade {
       return null;
     }
   }
+
 }

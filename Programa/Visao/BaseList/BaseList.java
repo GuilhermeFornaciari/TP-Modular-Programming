@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public abstract class BaseList<T extends Entidade> extends JPanel implements ActionListener {
 
@@ -84,6 +85,14 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
     });
   }
 
+  public void reloadTableData() {
+    System.out.println("Model same instance? " + (table.getModel() == tableModel));
+    tableModel.fireTableDataChanged();
+    if (table.getAutoResizeMode() != JTable.AUTO_RESIZE_OFF) {
+      table.doLayout();
+    }
+  }
+
   private void setupScrollPane() {
     scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -97,25 +106,34 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
   }
 
   public void populateTableModel() {
+    tableModel.setRowCount(0);
     tableData.forEach((item) -> {
-      Vector<Object> rowData = new Vector(tableConfig.getColumnConfigs().size()+1);
+      Vector<Object> rowData = new Vector(tableConfig.getColumnConfigs().size() + 1);
       tableConfig.getColumnConfigs().forEach((config) -> {
-        rowData.add(item.getProperty(config.getColumnName()).toString());
+        String propertyKey = config.getColumnName();
+        System.out.printf("%s \t", config.getColumnName());
+        try {
+          rowData.add(item.getProperty(propertyKey).toString());
+
+        } catch(Exception e) {
+          System.out.printf("\n %s\t%s\t%s\n", propertyKey, item.getProperty(propertyKey), e.toString());
+        }
       });
 
-      //Buttons
+      // Buttons
       JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 2));
       panel.setOpaque(true);
 
-      TableActionButton editButton = new TableActionButton("U", tableModel.getColumnCount()-1, item.getId(), TableAction.UPDATE);
+      TableActionButton editButton = new TableActionButton("U", tableModel.getColumnCount() - 1, item.getId(),
+          TableAction.UPDATE);
       editButton.addActionListener(this);
       panel.add(editButton);
 
-      TableActionButton deleteButton = new TableActionButton("D", tableModel.getColumnCount()-1, item.getId(), TableAction.DELETE);
+      TableActionButton deleteButton = new TableActionButton("D", tableModel.getColumnCount() - 1, item.getId(),
+          TableAction.DELETE);
       deleteButton.addActionListener(this);
       panel.add(deleteButton);
-      
-      
+
       panel.setVisible(true);
       rowData.addLast(panel);
       tableModel.addRow(rowData);
@@ -152,7 +170,8 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
   public class NonEditableTableModel extends DefaultTableModel {
     @Override
     public boolean isCellEditable(int row, int column) {
-      if (column == getColumnCount()-1) return true;
+      if (column == getColumnCount() - 1)
+        return true;
       return false;
     }
   }
@@ -163,11 +182,21 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
     if (button.getButtonAction() == TableAction.UPDATE) {
       System.out.println("Edit");
       System.out.println(button.getItemId());
+      this.onUpdateClick(button);
     }
     if (button.getButtonAction() == TableAction.DELETE) {
       System.out.println("Delete");
       System.out.println(button.getItemId());
+      this.onDeleteClick(button);
     }
+  }
+
+  public void onUpdateClick(TableActionButton button) {
+
+  }
+
+  public void onDeleteClick(TableActionButton button) {
+
   }
 
 }

@@ -6,7 +6,7 @@ import Programa.Visao.ObservableAction;
 import Programa.Visao.Publisher;
 import java.util.ArrayList;
  
- public class RepositorioGeral<T extends Entidade> implements Programa.Persistencia.IRepositorioGeral<T>, Publisher<T> {
+ public class RepositorioGeral<T extends Entidade> implements Programa.Persistencia.IRepositorioGeral<T> {
    private ArrayList<T> lista = new ArrayList<>();
    private Integer IdCounter = 0;  
    @Override

@@ -34,7 +34,6 @@ public class ClienteScreen extends JPanel implements Subscriber<Cliente> {
     
     clienteList = new CustomList(tableConfig);
     clienteForm = new ClienteForm();
-    ccForm = new ClienteFormCm(db.cliente);
     
     // add(ccForm, BorderLayout.NORTH);
     add(clienteListCm, BorderLayout.CENTER);
