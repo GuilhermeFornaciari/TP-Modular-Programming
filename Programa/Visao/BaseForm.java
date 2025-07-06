@@ -32,7 +32,7 @@ import java.awt.event.ActionEvent;
 
 public abstract class BaseForm<T extends Entidade> extends JFrame implements ActionListener, Subscriber<T> {
 
-  private final Map<String, JComponent> fields = new LinkedHashMap<>();
+  private final Map<String, JComponent> fields = new HashMap<>();
   private JButton submitButton;
   public IRepositorioGeral<T> repo;
   private JPanel mainPanel;

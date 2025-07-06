@@ -1,10 +1,13 @@
 package Programa.Visao.Cliente;
 
+import java.awt.GridBagConstraints;
+import java.sql.Date;
 import java.util.List;
+
+import javax.swing.JButton;
 
 import Programa.Modelo.Cliente;
 import Programa.Persistencia.IRepositorioGeral;
-import Programa.Visao.BaseForm;
 import Programa.Visao.ObservableAction;
 import Programa.Visao.Subscriber;
 import Programa.Visao.TableColumnConfig;
@@ -21,6 +24,22 @@ public class ClienteList extends BaseList<Cliente> implements Subscriber<Cliente
   }
 
   @Override
+  public void setupTableHeader() {
+    // TODO Auto-generated method stub
+    super.setupTableHeader();
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.BOTH;
+    gbc.gridx = 2;
+    gbc.gridy = 0;
+    JButton createButton2 = new JButton("OMG");
+    createButton2.addActionListener((e) -> {
+      Cliente c = new Cliente("Mozart", "090329032", "M", "9038120321", new Date(2004, 2, 3));
+      repo.criar(c);
+    });
+    headerPanel.add(createButton2, gbc);
+  }
+
+  @Override
   public void setupTableConfig() {
     tableConfig = new TableConfig();
     List<String> names = List.of("Nome", "CPF", "Email", "CEP", "DataNascimento");
@@ -31,16 +50,6 @@ public class ClienteList extends BaseList<Cliente> implements Subscriber<Cliente
       tableConfig.addColumnConfig(new TableColumnConfig(names.get(i), labels.get(i), widths.get(i)));
     }
 
-  }
-
-  @Override
-  public void onNotify(ObservableAction action) {
-    System.out.println("OnNotify");
-    getTableData();
-    System.out.println("PopulateTableModel");
-    populateTableModel();
-    System.out.println("Before ");
-    this.reloadTableData();
   }
 
   @Override
@@ -55,5 +64,17 @@ public class ClienteList extends BaseList<Cliente> implements Subscriber<Cliente
       form.dispose();
     }
   }
+
+  @Override
+  public void onCreateClick() {
+    ClienteFormCm form = new ClienteFormCm(repo, TableAction.CREATE);
+    form.setVisible(true);
+    try {
+    } catch (Exception e) {
+      form.setVisible(false);
+      form.dispose();
+    }
+  }
+
 
 }

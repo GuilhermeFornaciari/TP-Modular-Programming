@@ -38,21 +38,44 @@ public class ClienteFormCm extends BaseForm<Cliente> {
   public void onUpdate(Map<String, String> data) {
     super.onUpdate(data);
     System.out.println("OnUpdate");
-    ClienteBuilder builder = new ClienteBuilder();
-    builder.setId(Integer.parseInt(data.get("id")));
-    builder.setNome(data.get("Nome"));
-    builder.setEmail(data.get("Email"));
-    builder.setCPF(data.get("CPF"));
-    builder.setCEP(data.get("CEP"));
+    ClienteBuilder builder = new ClienteBuilder()
+    .withId(Integer.parseInt(data.get("id")))
+    .withCEP(data.get("CEP"))
+    .withCPF(data.get("CPF"))
+    .withCEP(data.get("Email"))
+    .withCEP(data.get("Nome"));
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
     LocalDate localDate = LocalDate.parse(data.get("DataNascimento"), formatter);
     Date date = Date.valueOf(localDate);
-    builder.setDataNascimento(date);
+    builder.withDataNascimento(date);
     try {
       this.repo.atualizar(builder.build());
     } catch (Exception e) {
     }
 
+  }
+
+  @Override
+  public void onCreate(Map<String, String> data) {
+    super.onCreate(data);
+    System.out.println("OnUpdate");
+    ClienteBuilder builder = new ClienteBuilder();
+    builder.withId(Integer.parseInt(data.get("id")));
+    
+    builder.withNome(data.get("Nome"));
+    builder.withEmail(data.get("Email"));
+    builder.withCPF(data.get("CPF"));
+    builder.withCEP(data.get("CEP"));
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
+    LocalDate localDate = LocalDate.parse(data.get("DataNascimento"), formatter);
+    Date date = Date.valueOf(localDate);
+    builder.withDataNascimento(date);
+    try {
+      this.repo.criar(builder.build());
+    } catch (Exception e) {
+      
+    }
   }
 
 }

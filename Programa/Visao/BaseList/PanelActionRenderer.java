@@ -18,6 +18,12 @@ public class PanelActionRenderer implements TableCellRenderer {
       JTable table, Object value,
       boolean isSelected, boolean hasFocus,
       int row, int column) {
-      return (JPanel) value;
+    if (value instanceof JPanel) {
+      JPanel panel = (JPanel) value;
+      panel.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+      return panel;
+    }
+    return new JLabel("NO LABEL");
   }
+
 }
