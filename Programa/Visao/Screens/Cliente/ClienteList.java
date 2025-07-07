@@ -1,10 +1,7 @@
 package Programa.Visao.Screens.Cliente;
 
-import java.awt.GridBagConstraints;
-import java.sql.Date;
 import java.util.List;
 
-import javax.swing.JButton;
 
 import Programa.Modelo.Cliente;
 import Programa.Persistencia.IRepositorioGeral;

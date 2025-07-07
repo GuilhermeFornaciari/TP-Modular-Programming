@@ -24,6 +24,11 @@ public class MovimentoCaixaForm extends BaseForm<MovimentoCaixa> {
     this.setupFields();
   }
 
+  public void setupItemMovimentoList() {
+    // GridBagConstraints gbc = new GridBagConstraints();
+    // Jpanel = new ItemMovmi
+  }
+
   public void setupFields() {
 
     ArrayList<ComboBoxItem> clienteOptions = new ArrayList<>();
