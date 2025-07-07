@@ -29,6 +29,10 @@ public class MovimentoCaixa extends Entidade {
         DataCriacao = dataCriacao;
     }
 
+    public ArrayList<ItemMovimento> getItemMovimentos(){
+        return this.itemMovimentos;
+    }
+
     public Float getvalorTotal() {
         Float soma = Float.parseFloat("0");
         for(ItemMovimento item: this.itemMovimentos){
