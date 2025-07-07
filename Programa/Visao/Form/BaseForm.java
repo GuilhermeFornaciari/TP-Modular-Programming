@@ -39,10 +39,11 @@ import java.awt.event.ActionEvent;
 public abstract class BaseForm<T extends Entidade> extends JFrame implements ActionListener, Subscriber<T> {
 
   private final Map<String, JComponent> fields = new HashMap<>();
-  private JButton submitButton;
+  protected JButton submitButton;
   public IRepositorioGeral<T> repo;
-  private JPanel mainPanel;
-  private TableAction action;
+  protected JPanel mainPanel;
+  protected TableAction action;
+  protected Integer rows, cols;
   // private final FormDataHandler<T> dataHandler;
 
   public BaseForm(IRepositorioGeral<T> repo, TableAction action) {
@@ -122,6 +123,8 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
 
     gbc.gridx = 1;
     if (fieldName != "id") mainPanel.add(field, gbc);
+    cols = gbc.gridx+1;
+    rows = gbc.gridy+1;
 
     updateFrameSize();
   }
