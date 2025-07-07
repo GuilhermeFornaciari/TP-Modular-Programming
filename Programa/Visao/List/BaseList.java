@@ -1,25 +1,20 @@
-package Programa.Visao.BaseList;
+package Programa.Visao.List;
 
 import Programa.Modelo.Cliente;
 import Programa.Modelo.Entidade;
 import Programa.Persistencia.IRepositorioGeral;
-import Programa.Visao.ObservableAction;
-import Programa.Visao.Subscriber;
-import Programa.Visao.TableConfig;
-import Programa.Visao.BaseList.TableActionButton.TableAction;
-import Programa.Visao.Cliente.ClienteFormCm;
+import Programa.Visao.List.TableActionButton.TableAction;
+import Programa.Visao.Observable.ObservableAction;
+import Programa.Visao.Observable.Subscriber;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,9 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 public abstract class BaseList<T extends Entidade> extends JPanel implements ActionListener, Subscriber<T> {
 
@@ -54,10 +48,10 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
   // Repo
   public IRepositorioGeral<T> repo;
 
-  public BaseList(IRepositorioGeral<T> repo) {
+  public BaseList(IRepositorioGeral<T> repo, String headerTitle) {
     super();
     this.repo = repo;
-    this.headerTitle = "Tabela";
+    this.headerTitle = headerTitle;
 
     this.setLayout(new BorderLayout());
 
@@ -69,33 +63,30 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
   }
 
   public void setupTableHeader() {
+    headerPanel = new JPanel(new GridBagLayout());
     GridBagConstraints gbc = new GridBagConstraints();
-    gbc.fill = GridBagConstraints.BOTH;
-    headerPanel = new JPanel();
+    
+    gbc.fill = GridBagConstraints.NONE;
 
-    gbc.weightx = 0;
+    gbc.weightx = 1;
     gbc.weighty = 0;
+    gbc.insets = new Insets(0, 50, 0, 50);
 
     gbc.gridx = 0;
     gbc.gridy = 0;
-    headerPanel.add(new JLabel(headerTitle), gbc);
+    gbc.anchor = GridBagConstraints.WEST;
+    JLabel headerLabel = new JLabel(headerTitle);
+    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    headerPanel.add(headerLabel, gbc);
 
     gbc.gridx = 1;
     gbc.gridy = 0;
+    gbc.anchor = GridBagConstraints.EAST;
     JButton createButton = new JButton("+");
-    createButton.addActionListener((e) -> {
+    createButton.addActionListener((_) -> {
       onCreateClick();
     });
     headerPanel.add(createButton, gbc);
-
-    gbc.gridx = 3;
-    gbc.gridy = 0;
-    JButton deleteLastRow = new JButton("-");
-    deleteLastRow.addActionListener((e) -> {
-      tableModel.removeRow(tableModel.getRowCount() - 1);
-    });
-    headerPanel.add(deleteLastRow, gbc);
-
   }
 
   public void setupTableBody() {
@@ -120,13 +111,12 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
     table.setFillsViewportHeight(true);
 
     int column = tableConfig.getColumnConfigs().size();
-    table.getColumnModel().getColumn(column).setCellRenderer(new PanelActionRenderer());
-    table.getColumnModel().getColumn(column).setCellEditor(new PanelActionEditor());
+    table.getColumnModel().getColumn(column).setCellRenderer(new ActionCellRenderer());
+    table.getColumnModel().getColumn(column).setCellEditor(new ActionCellEditor());
 
     if (!actionPanelsMap.isEmpty()) {
       Integer randomKey = actionPanelsMap.keySet().toArray(new Integer[0])[0];
       int height = actionPanelsMap.get(randomKey).getPreferredSize().height;
-      System.out.printf("Height %d\n", height);
       table.setRowHeight(height);
     }
 
@@ -143,8 +133,8 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
     table.setFillsViewportHeight(true);
 
     int column = tableConfig.getColumnConfigs().size();
-    table.getColumnModel().getColumn(column).setCellRenderer(new PanelActionRenderer());
-    table.getColumnModel().getColumn(column).setCellEditor(new PanelActionEditor());
+    table.getColumnModel().getColumn(column).setCellRenderer(new ActionCellRenderer());
+    table.getColumnModel().getColumn(column).setCellEditor(new ActionCellEditor());
   }
 
   public void reloadTableData() {
@@ -168,7 +158,7 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
 
   public void populateTableModel() {
     System.out.println("PopulateTableModel");
-    actionPanelsMap.forEach((i, panel) -> {
+    actionPanelsMap.forEach((_, panel) -> {
       Component[] components = panel.getComponents();
       for (Component c : components) {
         if (c instanceof TableActionButton) {
@@ -181,11 +171,16 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
     tableModel = new NonEditableTableModel();
     setupTableModel();
     tableData.forEach((item) -> {
-      Vector<Object> rowData = new Vector(tableConfig.getColumnConfigs().size() + 1);
+      Vector<Object> rowData = new Vector<Object>(tableConfig.getColumnConfigs().size() + 1);
 
       tableConfig.getColumnConfigs().forEach((config) -> {
         String propertyKey = config.getColumnName();
-        rowData.add(item.getProperty(propertyKey).toString());
+        Object propertyValue = item.getProperty(propertyKey);
+        if (propertyValue instanceof Cliente cliente) {
+          rowData.add(cliente.getNome());
+        } else {
+          rowData.add(propertyValue.toString());
+        }
       });
       try {
         JPanel panel = createActionPanel(item.getId());
@@ -215,7 +210,7 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
 
   public void populateTableModel(ArrayList<T> data) {
     data.forEach((item) -> {
-      Vector<String> rowData = new Vector(tableConfig.getColumnConfigs().size());
+      Vector<String> rowData = new Vector<String>(tableConfig.getColumnConfigs().size());
       tableConfig.getColumnConfigs().forEach((config) -> {
         rowData.add(item.getProperty(config.getColumnName()).toString());
       });

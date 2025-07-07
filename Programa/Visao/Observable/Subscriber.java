@@ -1,4 +1,4 @@
-package Programa.Visao;
+package Programa.Visao.Observable;
 
 public interface Subscriber<T> {
     default void onNotify(T registry, ObservableAction action) {};

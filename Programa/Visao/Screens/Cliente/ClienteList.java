@@ -1,4 +1,4 @@
-package Programa.Visao.Cliente;
+package Programa.Visao.Screens.Cliente;
 
 import java.awt.GridBagConstraints;
 import java.sql.Date;
@@ -8,35 +8,23 @@ import javax.swing.JButton;
 
 import Programa.Modelo.Cliente;
 import Programa.Persistencia.IRepositorioGeral;
-import Programa.Visao.ObservableAction;
-import Programa.Visao.Subscriber;
-import Programa.Visao.TableColumnConfig;
-import Programa.Visao.TableConfig;
-import Programa.Visao.BaseList.BaseList;
-import Programa.Visao.BaseList.TableActionButton;
-import Programa.Visao.BaseList.TableActionButton.TableAction;
+import Programa.Visao.List.BaseList;
+import Programa.Visao.List.TableActionButton;
+import Programa.Visao.List.TableColumnConfig;
+import Programa.Visao.List.TableConfig;
+import Programa.Visao.List.TableActionButton.TableAction;
 
-public class ClienteList extends BaseList<Cliente> implements Subscriber<Cliente> {
+public class ClienteList extends BaseList<Cliente> {
 
+  ClienteForm form;
   public ClienteList(IRepositorioGeral<Cliente> repo) {
-    super(repo);
+    super(repo, "Clientes");
     repo.registerObserver(this);
   }
 
   @Override
   public void setupTableHeader() {
-    // TODO Auto-generated method stub
     super.setupTableHeader();
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.fill = GridBagConstraints.BOTH;
-    gbc.gridx = 2;
-    gbc.gridy = 0;
-    JButton createButton2 = new JButton("OMG");
-    createButton2.addActionListener((e) -> {
-      Cliente c = new Cliente("Mozart", "090329032", "M", "9038120321", new Date(2004, 2, 3));
-      repo.criar(c);
-    });
-    headerPanel.add(createButton2, gbc);
   }
 
   @Override
@@ -55,7 +43,8 @@ public class ClienteList extends BaseList<Cliente> implements Subscriber<Cliente
   @Override
   public void onUpdateClick(TableActionButton button) {
     super.onUpdateClick(button);
-    ClienteFormCm form = new ClienteFormCm(repo, TableAction.UPDATE);
+    if (form != null) {form.setVisible(false); form.dispose();}
+    form = new ClienteForm(repo, TableAction.UPDATE);
     form.setVisible(true);
     try {
       form.populateForm(repo.pegar_um(button.getItemId()));
@@ -67,7 +56,8 @@ public class ClienteList extends BaseList<Cliente> implements Subscriber<Cliente
 
   @Override
   public void onCreateClick() {
-    ClienteFormCm form = new ClienteFormCm(repo, TableAction.CREATE);
+    if (form != null) {form.setVisible(false); form.dispose();}
+    form = new ClienteForm(repo, TableAction.CREATE);
     form.setVisible(true);
     try {
     } catch (Exception e) {

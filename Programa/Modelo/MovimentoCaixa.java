@@ -14,6 +14,12 @@ public class MovimentoCaixa extends Entidade {
         this.DataCriacao = DataCriacao;
         this.itemMovimentos = new ArrayList<ItemMovimento>();
     }
+    public MovimentoCaixa(Date DataCriacao, Cliente cliente) {
+      super(0);
+      this.cliente = cliente;
+      this.DataCriacao = DataCriacao;
+      this.itemMovimentos = new ArrayList<ItemMovimento>();
+  }
 
     public Date getDataCriacao() {
         return DataCriacao;

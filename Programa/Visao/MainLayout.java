@@ -1,7 +1,9 @@
 package Programa.Visao;
 
 import Programa.Persistencia.BancoDeDados;
-import Programa.Visao.Cliente.ClienteScreen;
+import Programa.Visao.Screens.Cliente.ClienteScreen;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,7 +16,7 @@ public class MainLayout extends  JFrame {
   private int height;
   private BancoDeDados db;
 
-  
+  private JPanel mainContentPanel;
 
   public MainLayout(BancoDeDados db) {
     super("GERENCIADOR DE TRAN**ÇÕES 2000");
@@ -28,6 +30,14 @@ public class MainLayout extends  JFrame {
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLayout(new GridBagLayout());
     
+
+    mainContentPanel = new JPanel(new BorderLayout());
+    mainContentPanel.setBackground(Color.WHITE);
+    mainContentPanel.add(new ClienteScreen(db));
+
+    Sidebar sidebar = new Sidebar(db);
+    sidebar.setOnMenuItemClick(this::changeContentPanel);
+
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.fill = GridBagConstraints.BOTH;
     
@@ -39,14 +49,13 @@ public class MainLayout extends  JFrame {
     gbc.weightx = 0.1;
     gbc.weighty = 0.1;
     this.add(panel1, gbc);
-
-    JPanel panel2 = new Sidebar();
+    
     gbc.gridx = 0;
     gbc.gridy = 1;
     gbc.weightx = 0.1;
     gbc.weighty = 0.9;
-    this.add(panel2, gbc);
-
+    this.add(sidebar, gbc);
+    
     JPanel panel3 = new JPanel();
     panel3.setBackground(Color.GREEN);
     gbc.gridx = 1;
@@ -54,16 +63,19 @@ public class MainLayout extends  JFrame {
     gbc.weightx = 0.9;
     gbc.weighty = 0.1;
     this.add(panel3, gbc);
-
-    JPanel panel4 = new ClienteScreen(db);
-    panel4.setBackground(Color.PINK);
+    
     gbc.gridx = 1;
     gbc.gridy = 1;
     gbc.weightx = 0.9;
     gbc.weighty = 0.9;
-    this.add(panel4, gbc);
+    this.add(mainContentPanel, gbc);
+    
+  }
 
-
-
+  public void changeContentPanel(JPanel panel) {
+    mainContentPanel.removeAll();
+    mainContentPanel.add(panel, BorderLayout.CENTER);
+    mainContentPanel.revalidate();
+    mainContentPanel.repaint();
   }
 }

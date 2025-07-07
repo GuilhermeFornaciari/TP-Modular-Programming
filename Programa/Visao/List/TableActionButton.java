@@ -1,6 +1,5 @@
-package Programa.Visao.BaseList;
+package Programa.Visao.List;
 
-import javax.swing.Action;
 import javax.swing.JButton;
 
 public class TableActionButton extends JButton {

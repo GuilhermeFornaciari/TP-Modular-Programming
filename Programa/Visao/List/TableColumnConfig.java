@@ -1,4 +1,4 @@
-package Programa.Visao;
+package Programa.Visao.List;
 
 public class TableColumnConfig {
 

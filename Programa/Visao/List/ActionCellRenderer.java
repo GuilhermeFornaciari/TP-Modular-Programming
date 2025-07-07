@@ -1,7 +1,5 @@
-package Programa.Visao.BaseList;
+package Programa.Visao.List;
 
-import java.awt.Button;
-import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JLabel;
@@ -9,8 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-public class PanelActionRenderer implements TableCellRenderer {
-  public PanelActionRenderer() {
+public class ActionCellRenderer implements TableCellRenderer {
+  public ActionCellRenderer() {
     super();
   }
 

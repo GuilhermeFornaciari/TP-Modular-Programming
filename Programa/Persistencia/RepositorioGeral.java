@@ -2,8 +2,8 @@ package Programa.Persistencia;
  
  import Programa.Modelo.Entidade;
 import Programa.Modelo.NotFoundException;
-import Programa.Visao.ObservableAction;
-import Programa.Visao.Publisher;
+import Programa.Visao.Observable.ObservableAction;
+
 import java.util.ArrayList;
  
  public class RepositorioGeral<T extends Entidade> implements Programa.Persistencia.IRepositorioGeral<T> {

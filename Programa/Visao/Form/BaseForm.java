@@ -1,6 +1,7 @@
-package Programa.Visao;
+package Programa.Visao.Form;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -10,23 +11,28 @@ import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
 import javax.swing.text.MaskFormatter;
 
 import Programa.Modelo.Entidade;
 import Programa.Persistencia.IRepositorioGeral;
-import Programa.Persistencia.RepositorioGeral;
-import Programa.Visao.BaseList.TableActionButton.TableAction;
+import Programa.Visao.Builder.BuilderValidationException;
+import Programa.Visao.List.TableActionButton.TableAction;
+import Programa.Visao.Observable.Subscriber;
+import Programa.Visao.Shared.ComboBoxItem;
+import Programa.Visao.Shared.CustomComboBoxRenderer;
 
 import java.awt.event.ActionEvent;
 
@@ -80,6 +86,26 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
     }
   }
 
+  public void addDropdownField(String fieldName, String label, ArrayList<ComboBoxItem> options) {
+    if (options.size() <= 0) return;
+    JComboBox<Object> field = new JComboBox<Object>();
+    field.setRenderer(new CustomComboBoxRenderer());
+    for (Integer i=0; i<options.size(); i++) {
+      field.addItem(options.get(i));
+    }
+    addFormField(fieldName, label, field);
+  }
+
+  public void addDropdownField(String fieldName, String label, Object[] options) {
+    if (options.length <= 0) return;
+    JComboBox<Object> field = new JComboBox<Object>();
+    field.setRenderer(new CustomComboBoxRenderer());
+    for (Integer i=0; i<options.length; i++) {
+      field.addItem(options[i]);
+    }
+    addFormField(fieldName, label, field);
+  }
+
   public void addFormField(String fieldName, String label, JComponent field, GridPosition gridPosition) {
     fields.put(fieldName, field);
   }
@@ -90,15 +116,12 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
     gbc.fill = GridBagConstraints.HORIZONTAL;
     gbc.weightx = 1.0;
     gbc.gridwidth = 1;
-
     gbc.gridx = 0;
     gbc.gridy = fields.size() - 1;
-    mainPanel.add(new JLabel(label + ":"), gbc);
+    if (fieldName != "id") mainPanel.add(new JLabel(label + ":"), gbc);
 
     gbc.gridx = 1;
-    mainPanel.add(field, gbc);
-
-    // GAMBI PRO BOTÃO DE SUBMIT (ARRUMAR DPS)
+    if (fieldName != "id") mainPanel.add(field, gbc);
 
     updateFrameSize();
   }
@@ -126,15 +149,21 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
       else if (component instanceof JFormattedTextField) {
         Object value = ((JFormattedTextField) field).getValue();
         values.put(key, value != null ? value.toString() : "");
+      } else if (component instanceof JComboBox comboBox) {
+        Object selectedItem = comboBox.getSelectedItem();
+        if (selectedItem instanceof ComboBoxItem cbItem) {
+          String value = cbItem.getValue();
+          values.put(key, value);
+        } else {
+          values.put(key, selectedItem.toString());
+        }
       }
     }
     return values;
   }
 
   public void clearFieldsValue() {
-    for (Map.Entry<String, JComponent> field : fields.entrySet()) {
-      String key = field.getKey();
-      JComponent component = field.getValue();
+    for (Map.Entry<String, JComponent> field : fields.entrySet()) {      JComponent component = field.getValue();
       if (component instanceof JTextField jTextField)
         jTextField.setText("");
       if (component instanceof JFormattedTextField jFormattedTextField)
@@ -177,23 +206,39 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
 
   }
 
-  public void onSubmit(ActionEvent e) {
-    if (e.getSource() == submitButton) {
-      if (action == TableAction.CREATE)
-        onCreate(getFieldsValue());
-      else if (action == TableAction.UPDATE)
-        onUpdate(getFieldsValue());
-      setVisible(false);
-      dispose();
+  public void onSubmit(ActionEvent event) {
+    if (event.getSource() == submitButton) {
+      try {
+        if (action == TableAction.CREATE)
+          onCreate(getFieldsValue());
+        else if (action == TableAction.UPDATE)
+          onUpdate(getFieldsValue());
+        setVisible(false);
+        dispose();
+      } catch (BuilderValidationException e) {
+        handleInvalidForm(e.getExceptionMap());
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 
-  public void onCreate(Map<String, String> data) {
+  public void onCreate(Map<String, ?> data) throws BuilderValidationException {
 
   }
 
-  public void onUpdate(Map<String, String> data) {
+  public void onUpdate(Map<String, ? extends Object> data) throws BuilderValidationException {
 
+  }
+
+  public void handleInvalidForm(Map<String, ArrayList<String>> exceptionMap) {
+    exceptionMap.forEach((key, value) -> {
+      SwingUtilities.invokeLater(() -> {
+        String tooltipText = String.join(" ", value);
+        fields.get(key).setToolTipText(tooltipText);
+        fields.get(key).setBorder(new LineBorder(Color.RED, 2));
+      });
+    });
   }
 
 }

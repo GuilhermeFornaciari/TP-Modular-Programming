@@ -2,7 +2,7 @@ package Programa.Persistencia;
 
 import Programa.Modelo.Entidade;
 import Programa.Modelo.NotFoundException;
-import Programa.Visao.Publisher;
+import Programa.Visao.Observable.Publisher;
 
 import java.util.ArrayList;
 

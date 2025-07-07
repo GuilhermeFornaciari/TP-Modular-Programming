@@ -7,6 +7,12 @@ public class TipoTransacao extends Entidade{
     this.tipo = tipo;
     this.descricao = descricao;
   }
+  public TipoTransacao(TipoDespesaReceita tipo,String descricao){
+    super(0);
+    this.tipo = tipo;
+    this.descricao = descricao;
+  }
+
   public TipoDespesaReceita getTipo() {
       return tipo;
   }
