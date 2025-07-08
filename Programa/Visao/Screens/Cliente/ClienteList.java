@@ -16,7 +16,6 @@ public class ClienteList extends BaseList<Cliente> {
   ClienteForm form;
   public ClienteList(IRepositorioGeral<Cliente> repo) {
     super(repo, "Clientes");
-    repo.registerObserver(this);
   }
 
   @Override
@@ -42,6 +41,7 @@ public class ClienteList extends BaseList<Cliente> {
     super.onUpdateClick(button);
     if (form != null) {form.setVisible(false); form.dispose();}
     form = new ClienteForm(repo, TableAction.UPDATE);
+    form.registerObserver(this);
     form.setVisible(true);
     try {
       form.populateForm(repo.pegar_um(button.getItemId()));
@@ -55,6 +55,7 @@ public class ClienteList extends BaseList<Cliente> {
   public void onCreateClick() {
     if (form != null) {form.setVisible(false); form.dispose();}
     form = new ClienteForm(repo, TableAction.CREATE);
+    form.registerObserver(this);
     form.setVisible(true);
     try {
     } catch (Exception e) {

@@ -1,5 +1,6 @@
 package Programa.Visao.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class TableActionButton extends JButton {
@@ -9,6 +10,12 @@ public class TableActionButton extends JButton {
 
   public TableActionButton(String text, int itemId, TableAction action) {
     super(text);
+    this.itemId = itemId;
+    this.buttonAction = action;
+  }
+
+  public TableActionButton(ImageIcon icon, int itemId, TableAction action) {
+    super(icon);
     this.itemId = itemId;
     this.buttonAction = action;
   }

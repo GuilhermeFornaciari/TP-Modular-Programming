@@ -2,7 +2,6 @@ package Programa.Persistencia;
  
  import Programa.Modelo.Entidade;
 import Programa.Modelo.NotFoundException;
-import Programa.Visao.Observable.ObservableAction;
 
 import java.util.ArrayList;
  
@@ -13,7 +12,6 @@ import java.util.ArrayList;
    public Integer criar(T entidade) {
      entidade.setId(IdCounter);
      lista.add(entidade);
-     notifySubscribers(ObservableAction.CREATE);
      this.IdCounter++;
      return entidade.getId();
    }
@@ -23,7 +21,6 @@ import java.util.ArrayList;
      for(Integer i = 0; i < lista.size(); i++){
        if (lista.get(i).getId().equals(entidade.getId())){
         lista.set(i, entidade);
-        notifySubscribers(ObservableAction.UPDATE);
         return;
        }
      }
@@ -35,7 +32,6 @@ import java.util.ArrayList;
        for (int i = 0; i < lista.size(); i++) {
            if (lista.get(i).getId().equals(entidade.getId())) { // Usando getId para comparar
                lista.remove(i);
-               notifySubscribers(ObservableAction.DELETE);
                return;
            }
        }

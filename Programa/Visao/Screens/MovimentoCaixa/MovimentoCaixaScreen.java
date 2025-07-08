@@ -12,7 +12,7 @@ public class MovimentoCaixaScreen extends JPanel {
   public MovimentoCaixaScreen(BancoDeDados db) {
     this.db = db;
     this.setLayout(new BorderLayout());
-    JPanel movimentoCaixaList = new MovimentoCaixaList(db.movimentoCaixa, db.cliente);
+    JPanel movimentoCaixaList = new MovimentoCaixaList(db.movimentoCaixa, db.cliente, db.tipoTransacao);
     add(movimentoCaixaList, BorderLayout.CENTER);
   }
 }

@@ -2,48 +2,60 @@ package Programa.Visao.List;
 
 import Programa.Modelo.Cliente;
 import Programa.Modelo.Entidade;
+import Programa.Modelo.TipoTransacao;
 import Programa.Persistencia.IRepositorioGeral;
 import Programa.Visao.List.TableActionButton.TableAction;
 import Programa.Visao.Observable.ObservableAction;
 import Programa.Visao.Observable.Subscriber;
+import Programa.Visao.Shared.RoundedButton;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 public abstract class BaseList<T extends Entidade> extends JPanel implements ActionListener, Subscriber<T> {
 
   DefaultTableModel tableModel = new NonEditableTableModel();
-  JTable table = new JTable();
-  JScrollPane scrollPane = new JScrollPane();
+  protected JTable table = new JTable();
+  protected JScrollPane scrollPane = new JScrollPane();
   Map<Integer, JPanel> actionPanelsMap = new HashMap<>();
 
   public TableConfig tableConfig;
 
-  ArrayList<T> tableData;
+  protected ArrayList<T> tableData;
   Map<Integer, T> dataMap = new HashMap<>();
 
   // Table Header
-  public JPanel headerPanel;
-  public String headerTitle;
+  protected JPanel headerPanel;
+  protected String headerTitle;
+
+  //Search
+  protected JTextField searchTextField = new JTextField();
 
   // Repo
   public IRepositorioGeral<T> repo;
@@ -62,31 +74,46 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
     this.add(scrollPane, BorderLayout.CENTER);
   }
 
+  public BaseList(String headerTitle) {
+    super();
+    this.headerTitle = headerTitle;
+
+    this.setLayout(new BorderLayout());
+
+    setupTableHeader();
+  }
+
   public void setupTableHeader() {
-    headerPanel = new JPanel(new GridBagLayout());
-    GridBagConstraints gbc = new GridBagConstraints();
-    
-    gbc.fill = GridBagConstraints.NONE;
+    headerPanel = new JPanel(new BorderLayout());
+    headerPanel.setBackground(Color.WHITE);
+    headerPanel.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createEmptyBorder(0, 0, 5, 0),
+        BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(2,2,2,2, Color.GRAY),
+            BorderFactory.createEmptyBorder(3, 3, 3, 3))));
 
-    gbc.weightx = 1;
-    gbc.weighty = 0;
-    gbc.insets = new Insets(0, 50, 0, 50);
-
-    gbc.gridx = 0;
-    gbc.gridy = 0;
-    gbc.anchor = GridBagConstraints.WEST;
     JLabel headerLabel = new JLabel(headerTitle);
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    headerPanel.add(headerLabel, gbc);
+    headerPanel.add(headerLabel, BorderLayout.WEST);
 
-    gbc.gridx = 1;
-    gbc.gridy = 0;
-    gbc.anchor = GridBagConstraints.EAST;
-    JButton createButton = new JButton("+");
+    searchTextField.setBorder(BorderFactory.createCompoundBorder(
+      BorderFactory.createEmptyBorder(0, 10, 0, 10),
+      BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GRAY)
+    ));
+    // searchTextField.getDocument().addDocumentListener(new DocumentListener() {
+    //   public void changedUpdate(DocumentEvent e) {
+    //     warn();
+    //   }
+
+    // });
+    // headerPanel.add(searchTextField, BorderLayout.CENTER);
+
+    RoundedButton createButton = new RoundedButton("+", 10, 30, 30, new Color(0x193CB8), new Color(0x193CB8).darker(),
+        Color.WHITE, Color.WHITE);
     createButton.addActionListener((_) -> {
       onCreateClick();
     });
-    headerPanel.add(createButton, gbc);
+    headerPanel.add(createButton, BorderLayout.EAST);
   }
 
   public void setupTableBody() {
@@ -157,7 +184,6 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
   }
 
   public void populateTableModel() {
-    System.out.println("PopulateTableModel");
     actionPanelsMap.forEach((_, panel) -> {
       Component[] components = panel.getComponents();
       for (Component c : components) {
@@ -178,6 +204,11 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
         Object propertyValue = item.getProperty(propertyKey);
         if (propertyValue instanceof Cliente cliente) {
           rowData.add(cliente.getNome());
+        } else if (propertyValue instanceof TipoTransacao tipoTransacao) {
+          rowData.add(tipoTransacao.getDescricao());
+        } else if (propertyValue instanceof Float floatVal) {
+          DecimalFormat decimalFormat = new DecimalFormat("0.00");
+          rowData.add(decimalFormat.format(floatVal));
         } else {
           rowData.add(propertyValue.toString());
         }
@@ -195,16 +226,37 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
   }
 
   private JPanel createActionPanel(int itemId) {
+
+    ImageIcon pencilIcon = null;
+    ImageIcon trashIcon = null;
+
+    try {
+      pencilIcon = new ImageIcon(getClass().getResource("/resources/assets/pencil-icon.png"));
+      trashIcon = new ImageIcon(getClass().getResource("/resources/assets/recycle-bin-icon.png"));
+      Image scaledPencil = pencilIcon.getImage().getScaledInstance(12, 12, Image.SCALE_SMOOTH);
+      Image scaledTrash = trashIcon.getImage().getScaledInstance(12, 12, Image.SCALE_SMOOTH);
+      pencilIcon = new ImageIcon(scaledPencil);
+      trashIcon = new ImageIcon(scaledTrash);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
     JPanel panel = new TableActionPanel();
     panel.setOpaque(true);
-    TableActionButton editButton = new TableActionButton("U", itemId,
-        TableAction.UPDATE);
+
+    TableActionButton editButton = null;
+    TableActionButton deleteButton = null;
+    
+    if (pencilIcon != null)editButton = new TableActionButton(pencilIcon, itemId, TableAction.UPDATE);
+    else editButton = new TableActionButton("U", itemId, TableAction.UPDATE);
     editButton.addActionListener(this);
     panel.add(editButton);
-    TableActionButton deleteButton = new TableActionButton("D", itemId,
-        TableAction.DELETE);
+    
+    if(trashIcon != null) deleteButton = new TableActionButton(trashIcon, itemId, TableAction.DELETE);
+    else deleteButton = new TableActionButton("D", itemId, TableAction.DELETE);
     deleteButton.addActionListener(this);
     panel.add(deleteButton);
+    
     return panel;
   }
 
@@ -234,6 +286,23 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
   public void getTableData() {
     tableData = repo.pegar_todos();
   }
+
+  public void search(String query, String searchField) {
+    ArrayList<T> filtered = new ArrayList<>();
+    for (T item: tableData) {
+      Object value = null;
+      try {
+        value = item.getProperty(searchField);
+      } catch (Exception e) { 
+        e.printStackTrace();
+      }
+
+      if (value != null && value.toString().toLowerCase().contains(query.toLowerCase())) {
+        filtered.add(item);
+      } 
+    }
+    tableData = filtered;
+  }  
 
   public class NonEditableTableModel extends DefaultTableModel {
     @Override
@@ -276,6 +345,7 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
 
   @Override
   public void onNotify(ObservableAction action) {
+    System.out.println("ON NOTIFY");
     if (action == ObservableAction.DELETE)
       return;
     getTableData();

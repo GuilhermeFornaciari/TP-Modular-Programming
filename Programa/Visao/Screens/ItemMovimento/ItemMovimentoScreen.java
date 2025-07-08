@@ -4,16 +4,16 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
-import Programa.Persistencia.BancoDeDados;
-import Programa.Visao.Screens.MovimentoCaixa.MovimentoCaixaList;
+import Programa.Modelo.MovimentoCaixa;
+import Programa.Modelo.TipoTransacao;
+import Programa.Persistencia.IRepositorioGeral;
 
 public class ItemMovimentoScreen extends JPanel {
-  BancoDeDados db;
 
-  public ItemMovimentoScreen(BancoDeDados db) {
-    this.db = db;
+  public ItemMovimentoScreen(IRepositorioGeral<MovimentoCaixa> repo, IRepositorioGeral<TipoTransacao> tipoTransacaoRepo, Integer idMovimentoCaixa) {
     this.setLayout(new BorderLayout());
-    JPanel itemMovimentoList = new ItemMovimentoList(db.movimentoCaixa, db.cliente);
+    JPanel itemMovimentoList = new ItemMovimentoList(repo, tipoTransacaoRepo, idMovimentoCaixa);
     add(itemMovimentoList, BorderLayout.CENTER);
   }
+
 }

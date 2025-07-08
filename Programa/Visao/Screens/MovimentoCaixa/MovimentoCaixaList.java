@@ -4,6 +4,7 @@ import java.util.List;
 
 import Programa.Modelo.Cliente;
 import Programa.Modelo.MovimentoCaixa;
+import Programa.Modelo.TipoTransacao;
 import Programa.Persistencia.IRepositorioGeral;
 import Programa.Visao.List.BaseList;
 import Programa.Visao.List.TableActionButton;
@@ -16,11 +17,13 @@ public class MovimentoCaixaList extends BaseList<MovimentoCaixa> {
   MovimentoCaixaForm form;
 
   IRepositorioGeral<Cliente> clienteRepo;
+  IRepositorioGeral<MovimentoCaixa> movimentoCaixaRepo;
+  IRepositorioGeral<TipoTransacao> tipoTransacaoRepo;
 
-  public MovimentoCaixaList(IRepositorioGeral<MovimentoCaixa> repo, IRepositorioGeral<Cliente> clienteRepo) {
+  public MovimentoCaixaList(IRepositorioGeral<MovimentoCaixa> repo, IRepositorioGeral<Cliente> clienteRepo, IRepositorioGeral<TipoTransacao> tipoTransacaoRepo) {
     super(repo, "Movimentos de Caixa");
-    repo.registerObserver(this);
     this.clienteRepo = clienteRepo;
+    this.tipoTransacaoRepo = tipoTransacaoRepo;
   }
 
   @Override
@@ -42,11 +45,14 @@ public class MovimentoCaixaList extends BaseList<MovimentoCaixa> {
       form.setVisible(false);
       form.dispose();
     }
-    form = new MovimentoCaixaForm(repo, clienteRepo, TableAction.UPDATE);
+    form = new MovimentoCaixaForm(repo, clienteRepo, tipoTransacaoRepo, TableAction.UPDATE);
+    form.registerObserver(this);
     form.setVisible(true);
     try {
       form.populateForm(repo.pegar_um(button.getItemId()));
+      form.setupItemMovimentoScreen();
     } catch (Exception e) {
+      e.printStackTrace();
       form.setVisible(false);
       form.dispose();
     }
@@ -58,7 +64,8 @@ public class MovimentoCaixaList extends BaseList<MovimentoCaixa> {
       form.setVisible(false);
       form.dispose();
     }
-    form = new MovimentoCaixaForm(repo, clienteRepo, TableAction.CREATE);
+    form = new MovimentoCaixaForm(repo, clienteRepo, tipoTransacaoRepo, TableAction.CREATE);
+    form.registerObserver(this);
     form.setVisible(true);
     try {
     } catch (Exception e) {

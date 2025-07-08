@@ -15,6 +15,15 @@ public class ItemMovimento extends Entidade{
       this.valor = valor;
     }
 
+    public ItemMovimento(Integer Id, Date dataCriacao, Date dataPagamento, String descricao, TipoTransacao tipo, float valor) {
+      super(Id);
+      this.tipo = tipo;
+      this.dataCriacao = dataCriacao;
+      this.dataPagamento = dataPagamento;
+      this.descricao = descricao;
+      this.valor = valor;
+    }
+
   public Float getValor() {
       return valor;
   }

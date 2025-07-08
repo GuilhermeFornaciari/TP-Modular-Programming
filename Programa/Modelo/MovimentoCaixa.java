@@ -42,11 +42,24 @@ public class MovimentoCaixa extends Entidade {
     }
 
     public void adicionarTransacao(ItemMovimento itemMovimento) {
+      if (itemMovimentos.size() > 0) {
+        itemMovimento.setId(itemMovimentos.getLast().getId() + 1);
+      } else {
+        itemMovimento.setId(0);
+      }
         itemMovimentos.add(itemMovimento);
     }
     
     public void removerTransacao(Integer idTransacao) {
         itemMovimentos.removeIf(res -> res.getId().equals(idTransacao));
+    }
+
+    public void atualizarTransacao(ItemMovimento itemMovimento) {
+      for (Integer i=0; i< itemMovimentos.size(); i++) {
+        if (!itemMovimentos.get(i).getId().equals(itemMovimento.getId())) continue;
+        itemMovimentos.set(i, itemMovimento);
+        return;
+      }
     }
 
 

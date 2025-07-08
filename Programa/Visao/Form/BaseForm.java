@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -21,6 +23,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
@@ -30,20 +33,23 @@ import Programa.Modelo.Entidade;
 import Programa.Persistencia.IRepositorioGeral;
 import Programa.Visao.Builder.BuilderValidationException;
 import Programa.Visao.List.TableActionButton.TableAction;
+import Programa.Visao.Observable.ObservableAction;
+import Programa.Visao.Observable.Publisher;
 import Programa.Visao.Observable.Subscriber;
 import Programa.Visao.Shared.ComboBoxItem;
 import Programa.Visao.Shared.CustomComboBoxRenderer;
+import Programa.Visao.Shared.NumericTextField.NumericTextField;
 
 import java.awt.event.ActionEvent;
 
-public abstract class BaseForm<T extends Entidade> extends JFrame implements ActionListener, Subscriber<T> {
+public abstract class BaseForm<T extends Entidade> extends JFrame implements ActionListener, Subscriber<T>, Publisher<T> {
 
   private final Map<String, JComponent> fields = new HashMap<>();
   protected JButton submitButton;
   public IRepositorioGeral<T> repo;
-  protected JPanel mainPanel;
+  protected JPanel fieldsPanel;
   protected TableAction action;
-  protected Integer rows, cols;
+  protected Integer rows, cols, currentRow = 0;
   // private final FormDataHandler<T> dataHandler;
 
   public BaseForm(IRepositorioGeral<T> repo, TableAction action) {
@@ -51,26 +57,32 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
     this.repo = repo;
     this.action = action;
 
+    //Content panel is the JFRAME panel
     Container contentPane = getContentPane();
     contentPane.setLayout(new BorderLayout());
 
-    mainPanel = new JPanel(new GridBagLayout()) {
-        @Override
-        public Dimension getPreferredSize() {
-            Dimension preferred = super.getPreferredSize();
-            return new Dimension(500, preferred.height);
-        }
-    };
-
-    contentPane.add(mainPanel, BorderLayout.CENTER);
-
+    JPanel wrapperPanel = new JPanel(new BorderLayout());
+    wrapperPanel.setBackground(Color.WHITE);
+    wrapperPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    contentPane.add(wrapperPanel, BorderLayout.CENTER);
+    
+    fieldsPanel = new JPanel(new GridBagLayout());
+    fieldsPanel.setBackground(Color.WHITE);
+    JScrollPane scrollPane = new JScrollPane(fieldsPanel);
+    scrollPane.setBorder(null);
+    
+    //Button Panel is just the last row in the form, with the Submit button ("Salvar")
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    buttonPanel.setBackground(Color.WHITE);
     submitButton = new JButton("Salvar");
     submitButton.addActionListener(e -> onSubmit(e));
-
     buttonPanel.add(submitButton);
-    
-    contentPane.add(buttonPanel, BorderLayout.SOUTH);
+
+    //Adding components to contentPanel
+    wrapperPanel.add(scrollPane, BorderLayout.CENTER);
+    wrapperPanel.add(buttonPanel, BorderLayout.SOUTH);
+    setMinimumSize(new Dimension(600, getMinimumSize().height));
+    updateFrameSize();
   }
 
   public void addTextField(String fieldName, String label) {
@@ -88,20 +100,27 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
   }
 
   public void addDropdownField(String fieldName, String label, ArrayList<ComboBoxItem> options) {
-    if (options.size() <= 0) return;
+    if (options.size() <= 0)
+      return;
     JComboBox<Object> field = new JComboBox<Object>();
     field.setRenderer(new CustomComboBoxRenderer());
-    for (Integer i=0; i<options.size(); i++) {
+    for (Integer i = 0; i < options.size(); i++) {
       field.addItem(options.get(i));
     }
     addFormField(fieldName, label, field);
   }
 
+  public void addNumericTextField(String fieldName, String label) {
+    JTextField field = new NumericTextField();
+    addFormField(fieldName, label, field);
+  }
+
   public void addDropdownField(String fieldName, String label, Object[] options) {
-    if (options.length <= 0) return;
+    if (options.length <= 0)
+      return;
     JComboBox<Object> field = new JComboBox<Object>();
     field.setRenderer(new CustomComboBoxRenderer());
-    for (Integer i=0; i<options.length; i++) {
+    for (Integer i = 0; i < options.length; i++) {
       field.addItem(options[i]);
     }
     addFormField(fieldName, label, field);
@@ -114,31 +133,52 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
   public void addFormField(String fieldName, String label, JComponent field) {
     fields.put(fieldName, field);
     GridBagConstraints gbc = new GridBagConstraints();
-    gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.fill = GridBagConstraints.BOTH;
+    gbc.insets = new Insets(5, 5, 5, 5);
     gbc.weightx = 1.0;
+    gbc.weighty = 1.0;
     gbc.gridwidth = 1;
     gbc.gridx = 0;
     gbc.gridy = fields.size() - 1;
-    if (fieldName != "id") mainPanel.add(new JLabel(label + ":"), gbc);
+    if (fieldName != "id")
+      fieldsPanel.add(new JLabel(label + ":"), gbc);
 
     gbc.gridx = 1;
-    if (fieldName != "id") mainPanel.add(field, gbc);
-    cols = gbc.gridx+1;
-    rows = gbc.gridy+1;
+    if (fieldName != "id") fieldsPanel.add(field, gbc);
+    cols = gbc.gridx + 1;
+    rows = gbc.gridy + 1;
+
+    currentRow++;
 
     updateFrameSize();
   }
 
+  public void addCustomPanel(JPanel panel, int gridwidth) {
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.gridx = 0;
+    gbc.gridy = currentRow;
+    gbc.gridwidth = gridwidth;
+    gbc.fill = GridBagConstraints.BOTH;
+    gbc.weightx = 1.0;
+    gbc.weighty = 1.0;
+    gbc.insets = new Insets(10, 5, 10, 5);
+
+    fieldsPanel.add(panel, gbc);
+    currentRow++;
+  }
+
   public void updateFrameSize() {
-    mainPanel.revalidate();
+    // fieldsPanel.revalidate();
 
-    Dimension preferred = mainPanel.getPreferredSize();
+    // Dimension preferred = fieldsPanel.getPreferredSize();
 
-    Insets insets = getInsets();
-    int totalHeight = preferred.height + insets.top + insets.bottom;
+    // Insets insets = getInsets();
+    // int totalHeight = preferred.height + insets.top + insets.bottom;
 
-    setSize(500 + insets.left + insets.right, totalHeight + insets.top + insets.bottom + 60);
+    // setSize(500 + insets.left + insets.right, totalHeight + insets.top + insets.bottom + 60);
 
+    // setLocationRelativeTo(null);
+    pack();
     setLocationRelativeTo(null);
   }
 
@@ -166,7 +206,8 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
   }
 
   public void clearFieldsValue() {
-    for (Map.Entry<String, JComponent> field : fields.entrySet()) {      JComponent component = field.getValue();
+    for (Map.Entry<String, JComponent> field : fields.entrySet()) {
+      JComponent component = field.getValue();
       if (component instanceof JTextField jTextField)
         jTextField.setText("");
       if (component instanceof JFormattedTextField jFormattedTextField)
@@ -216,6 +257,7 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
           onCreate(getFieldsValue());
         else if (action == TableAction.UPDATE)
           onUpdate(getFieldsValue());
+        notifySubscribers(action == TableAction.CREATE ? ObservableAction.CREATE : ObservableAction.UPDATE);
         setVisible(false);
         dispose();
       } catch (BuilderValidationException e) {

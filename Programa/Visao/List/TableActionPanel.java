@@ -14,8 +14,6 @@ public class TableActionPanel extends JPanel {
   @Override
   public Dimension getPreferredSize() {
     Dimension size = super.getPreferredSize();
-
-    System.out.printf("Custom panel %d\n", getComponentCount());
     if (getComponentCount() > 0) {
       Integer buttonHeight = getComponent(0).getPreferredSize().height;
       int preferredHeight = buttonHeight;

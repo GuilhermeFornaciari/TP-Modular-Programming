@@ -14,8 +14,10 @@ public class TransacaoList extends BaseList<TipoTransacao> {
 
   TransacaoForm form;
   public TransacaoList(IRepositorioGeral<TipoTransacao> repo) {
-    super(repo, "Transações");
-    repo.registerObserver(this);
+    super(repo, "Tipos de Transação");
+    search("cliente", "descricao");
+    populateTableModel();
+    updateTable();
   }
 
   @Override
@@ -38,6 +40,7 @@ public class TransacaoList extends BaseList<TipoTransacao> {
       form.dispose();
     }
     form = new TransacaoForm(repo, TableAction.UPDATE);
+    form.registerObserver(this);
     form.setVisible(true);
     try {
       form.populateForm(repo.pegar_um(button.getItemId()));
@@ -51,6 +54,7 @@ public class TransacaoList extends BaseList<TipoTransacao> {
   public void onCreateClick() {
     if (form != null) {form.setVisible(false); form.dispose();}
     form = new TransacaoForm(repo, TableAction.CREATE);
+    form.registerObserver(this);
     form.setVisible(true);
     try {
     } catch (Exception e) {

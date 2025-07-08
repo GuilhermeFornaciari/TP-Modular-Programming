@@ -1,8 +1,12 @@
 package Programa.Visao.Screens.ItemMovimento;
 
+import java.awt.BorderLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 import Programa.Modelo.ItemMovimento;
+import Programa.Modelo.MovimentoCaixa;
+import Programa.Modelo.NotFoundException;
 import Programa.Modelo.TipoTransacao;
 import Programa.Persistencia.IRepositorioGeral;
 import Programa.Visao.List.BaseList;
@@ -10,17 +14,26 @@ import Programa.Visao.List.TableActionButton;
 import Programa.Visao.List.TableActionButton.TableAction;
 import Programa.Visao.List.TableColumnConfig;
 import Programa.Visao.List.TableConfig;
-import Programa.Visao.Screens.MovimentoCaixa.MovimentoCaixaForm;
 
 public class ItemMovimentoList extends BaseList<ItemMovimento> {
 
   ItemMovimentoForm form;
-  IRepositorioGeral<TipoTransacao> tipoTransacaoRepo;
 
-  public ItemMovimentoList(IRepositorioGeral<ItemMovimento> repo, IRepositorioGeral<TipoTransacao> tipoTransacaoRepo) {
-    super(repo, "Item Movimento");
-    repo.registerObserver(this);
+  IRepositorioGeral<TipoTransacao> tipoTransacaoRepo;
+  IRepositorioGeral<MovimentoCaixa> movimentoCaixaRepo;
+
+  Integer idMovimentoCaixa;
+
+  public ItemMovimentoList(IRepositorioGeral<MovimentoCaixa> repo, IRepositorioGeral<TipoTransacao> tipoTransacaoRepo,
+      Integer idMovimentoCaixa) {
+    super("Item Movimento");
     this.tipoTransacaoRepo = tipoTransacaoRepo;
+    this.movimentoCaixaRepo = repo;
+    this.idMovimentoCaixa = idMovimentoCaixa;
+    setupTableBody();
+
+    this.add(headerPanel, BorderLayout.NORTH);
+    this.add(scrollPane, BorderLayout.CENTER);
   }
 
   @Override
@@ -36,19 +49,61 @@ public class ItemMovimentoList extends BaseList<ItemMovimento> {
   }
 
   @Override
+  public void getTableData() {
+    try {
+      MovimentoCaixa movimentoCaixa = movimentoCaixaRepo.pegar_um(idMovimentoCaixa);
+      tableData = movimentoCaixa.getItemMovimentos();
+    } catch (Exception e) {
+      tableData = new ArrayList<>();
+    }
+  }
+
+  @Override
   public void onUpdateClick(TableActionButton button) {
     super.onUpdateClick(button);
-    if (form != null) {
+    try {
+      if (form != null) {
+        form.setVisible(false);
+        form.dispose();
+      }
+
+      ItemMovimento itemMovimento = null;
+
+      MovimentoCaixa movimentoCaixa = movimentoCaixaRepo.pegar_um(idMovimentoCaixa);
+      for (ItemMovimento item : movimentoCaixa.getItemMovimentos()) {
+        if (item.getId().equals(button.getItemId()))
+          ;
+        itemMovimento = item;
+      }
+
+      if (itemMovimento == null)
+        return;
+
+      form = new ItemMovimentoForm(repo, tipoTransacaoRepo, movimentoCaixaRepo, idMovimentoCaixa, TableAction.UPDATE);
+      form.registerObserver(this);
+
+      form.setVisible(true);
+      form.populateForm(itemMovimento);
+    } catch (Exception e) {
+      e.printStackTrace();
       form.setVisible(false);
       form.dispose();
     }
-    form = new ItemMovimentoForm(repo, tipoTransacaoRepo, TableAction.UPDATE);
-    form.setVisible(true);
+  }
+
+  @Override
+  public void onDeleteClick(TableActionButton button) {
     try {
-      form.populateForm(repo.pegar_um(button.getItemId()));
+      MovimentoCaixa movimentoCaixa = movimentoCaixaRepo.pegar_um(idMovimentoCaixa);
+      movimentoCaixa.removerTransacao(button.getItemId());
+      movimentoCaixaRepo.atualizar(movimentoCaixa);
+      getTableData();
+      populateTableModel();
+      updateTable();
+    } catch (NotFoundException e) {
+      e.printStackTrace();
     } catch (Exception e) {
-      form.setVisible(false);
-      form.dispose();
+      e.printStackTrace();
     }
   }
 
@@ -58,7 +113,8 @@ public class ItemMovimentoList extends BaseList<ItemMovimento> {
       form.setVisible(false);
       form.dispose();
     }
-    form = new ItemMovimentoForm(repo, tipoTransacaoRepo, TableAction.CREATE);
+    form = new ItemMovimentoForm(repo, tipoTransacaoRepo, movimentoCaixaRepo, idMovimentoCaixa, TableAction.CREATE);
+    form.registerObserver(this);
     form.setVisible(true);
     try {
     } catch (Exception e) {
@@ -66,6 +122,5 @@ public class ItemMovimentoList extends BaseList<ItemMovimento> {
       form.dispose();
     }
   }
-
 
 }

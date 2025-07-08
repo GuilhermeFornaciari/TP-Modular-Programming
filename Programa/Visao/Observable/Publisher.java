@@ -6,7 +6,6 @@ import java.util.List;
 public interface Publisher<T> {
   List<Subscriber> subscribers = new ArrayList<>();
   default public void registerObserver(Subscriber<T> observer) {
-    System.out.println("REgistered new observer");
     subscribers.add(observer);
   };
   default  void notifySubscribers(T data, ObservableAction action) {

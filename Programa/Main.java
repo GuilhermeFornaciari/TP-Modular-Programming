@@ -23,8 +23,8 @@ public class Main {
         banco.tipoTransacao.criar(tipoTransacao2);
         banco.cliente.criar(cliente);
         MovimentoCaixa movimentoCaixa = new MovimentoCaixa(1,java.sql.Date.valueOf("2025-05-13"),cliente);
-        ItemMovimento item1 = new ItemMovimento(1, java.sql.Date.valueOf("2025-05-13"),"sim de contas",tipoTransacao, 221);
-        ItemMovimento item2 = new ItemMovimento(2, java.sql.Date.valueOf("2025-05-13"),"não de contas",tipoTransacao2,3213);
+        ItemMovimento item1 = new ItemMovimento(1, java.sql.Date.valueOf("2025-05-12"), java.sql.Date.valueOf("2025-05-13"),"sim de contas",tipoTransacao, 221);
+        ItemMovimento item2 = new ItemMovimento(2, java.sql.Date.valueOf("2025-05-12"), java.sql.Date.valueOf("2025-05-13"),"não de contas",tipoTransacao2,3213);
         movimentoCaixa.adicionarTransacao(item1);
         movimentoCaixa.adicionarTransacao(item2);
         banco.movimentoCaixa.criar(movimentoCaixa);
