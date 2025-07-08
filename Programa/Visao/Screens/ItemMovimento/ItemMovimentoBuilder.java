@@ -14,7 +14,7 @@ public class ItemMovimentoBuilder extends Builder<ItemMovimento> {
   private Date dataCriacao;
   private Date dataPagamento;
   private String descricao;
-  private float valor;
+  private Float valor;
 
   public ItemMovimentoBuilder() {
   }
@@ -54,7 +54,7 @@ public class ItemMovimentoBuilder extends Builder<ItemMovimento> {
     return this;
   }
 
-  public ItemMovimentoBuilder withValor(float valor) {
+  public ItemMovimentoBuilder withValor(Float valor) {
     this.valor = valor;
     return this;
   }
@@ -63,6 +63,12 @@ public class ItemMovimentoBuilder extends Builder<ItemMovimento> {
   protected void validate() {
     exceptionMap.clear();
     
+    if (valor == null) {
+      addException("valor", "Valor não pode ser nulo");
+    } else if (valor <= 0) {
+      addException("valor", "Valor deve ser maior que zero");
+    }
+
     if (tipo == null) {
       addException("tipo", "Tipo de transação não pode ser nulo");
     }
@@ -81,8 +87,6 @@ public class ItemMovimentoBuilder extends Builder<ItemMovimento> {
       addException("descricao", "Descrição não pode ser vazia");
     }
 
-    if (valor <= 0) {
-      addException("valor", "Valor deve ser maior que zero");
-    }
+
   }
 }

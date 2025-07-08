@@ -28,13 +28,13 @@ public class MainLayout extends  JFrame {
   private JPanel mainContentPanel;
 
   public MainLayout(BancoDeDados db) {
-    super("GERENCIADOR DE TRAN**ÇÕES 2000");
+    super("SISTEMA FINANCEIRO SIMPLIFICADO");
 
     this.db = db;
 
     height = 720;
     width = 1280;
-    setResizable(false);
+    setResizable(true);
     setSize(width, height);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLayout(new GridBagLayout());
@@ -88,14 +88,14 @@ public class MainLayout extends  JFrame {
       BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK),
       BorderFactory.createEmptyBorder(8, 10, 10, 10)
     ));
-    if (iconLabel != null) {
-      panel3.add(iconLabel, BorderLayout.EAST, SwingConstants.CENTER);
-      panel3.setAlignmentX(CENTER_ALIGNMENT);
-      panel3.setAlignmentY(CENTER_ALIGNMENT);
-    } else {
-      RoundedButton btn = new RoundedButton("Sair",  10, 60, 10, Color.WHITE, Color.WHITE, Color.GRAY, Color.DARK_GRAY);
-      panel3.add(btn, BorderLayout.EAST);
-    }
+    // if (iconLabel != null) {
+    //   panel3.add(iconLabel, BorderLayout.EAST, SwingConstants.CENTER);
+    //   panel3.setAlignmentX(CENTER_ALIGNMENT);
+    //   panel3.setAlignmentY(CENTER_ALIGNMENT);
+    // } else {
+    //   RoundedButton btn = new RoundedButton("Sair",  10, 60, 10, Color.WHITE, Color.WHITE, Color.GRAY, Color.DARK_GRAY);
+    //   panel3.add(btn, BorderLayout.EAST);
+    // }
 
     gbc.gridx = 1;
     gbc.gridy = 0;

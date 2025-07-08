@@ -26,7 +26,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.MaskFormatter;
 
 import Programa.Modelo.Entidade;
@@ -50,6 +56,7 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
   protected JPanel fieldsPanel;
   protected TableAction action;
   protected Integer rows, cols, currentRow = 0;
+  protected Map<String, ArrayList<String>> fieldsExceptions;
   // private final FormDataHandler<T> dataHandler;
 
   public BaseForm(IRepositorioGeral<T> repo, TableAction action) {
@@ -277,6 +284,7 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
   }
 
   public void handleInvalidForm(Map<String, ArrayList<String>> exceptionMap) {
+    fieldsExceptions = exceptionMap;
     exceptionMap.forEach((key, value) -> {
       SwingUtilities.invokeLater(() -> {
         String tooltipText = String.join(" ", value);
@@ -284,6 +292,29 @@ public abstract class BaseForm<T extends Entidade> extends JFrame implements Act
         fields.get(key).setBorder(new LineBorder(Color.RED, 2));
       });
     });
+  }
+
+  public void handleInvalidForm() {
+    fieldsExceptions.forEach((key, value) -> {
+      SwingUtilities.invokeLater(() -> {
+        String tooltipText = String.join(" ", value);
+        JComponent field = fields.get(key);
+        field.setToolTipText(tooltipText);
+        field.setBorder(new LineBorder(Color.RED, 1));
+      });
+    });
+  }
+
+  public void removeFieldExceptions(String fieldName) {
+    try {
+      if (fieldsExceptions.get(fieldName) == null) return;
+      fieldsExceptions.remove(fieldName);
+      fields.get(fieldName).setToolTipText("");
+      fields.get(fieldName).setBorder(new LineBorder(Color.DARK_GRAY, 1));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    handleInvalidForm();
   }
 
 }

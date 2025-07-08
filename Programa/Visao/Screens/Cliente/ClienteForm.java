@@ -69,7 +69,6 @@ public class ClienteForm extends BaseForm<Cliente> {
   public void onCreate(Map<String, ?> data) throws BuilderValidationException {
     super.onCreate(data);
     Map<String, String> tempData = (Map<String, String>) data;
-    System.out.println("OnCreate");
     ClienteBuilder builder = new ClienteBuilder();
     builder.withNome(tempData.get("Nome"));
     builder.withEmail(tempData.get("Email"));

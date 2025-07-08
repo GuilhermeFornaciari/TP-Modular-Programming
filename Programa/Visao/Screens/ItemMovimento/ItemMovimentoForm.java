@@ -86,9 +86,13 @@ public class ItemMovimentoForm extends BaseForm<ItemMovimento> {
       builder.withTipo(null);
     }
 
-    String valorStr = tempData.get("valor");
-    if (valorStr.endsWith(".")) valorStr.replace(".", "");
-    builder.withValor(Float.parseFloat(valorStr));
+    try {
+      String valorStr = tempData.get("valor");
+      if (valorStr.endsWith(".")) valorStr.replace(".", "");
+      builder.withValor(Float.parseFloat(valorStr));
+    } catch (Exception e) {
+      builder.withValor(null);
+    }
 
     ItemMovimento updatingData = builder.build();
     try {
@@ -134,9 +138,13 @@ public class ItemMovimentoForm extends BaseForm<ItemMovimento> {
       builder.withTipo(null);
     }
 
-    String valorStr = tempData.get("valor");
-    if (valorStr.endsWith(".")) valorStr.replace(".", "");
-    builder.withValor(Float.parseFloat(valorStr));
+    try {
+      String valorStr = tempData.get("valor");
+      if (valorStr.endsWith(".")) valorStr.replace(".", "");
+      builder.withValor(Float.parseFloat(valorStr));
+    } catch (Exception e) {
+      builder.withValor(null);
+    }
 
     ItemMovimento creatingData = builder.build();
     try {

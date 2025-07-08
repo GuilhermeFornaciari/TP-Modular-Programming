@@ -46,6 +46,8 @@ public class ItemMovimentoList extends BaseList<ItemMovimento> {
     for (int i = 0; i < labels.size(); i++) {
       tableConfig.addColumnConfig(new TableColumnConfig(names.get(i), labels.get(i), widths.get(i)));
     }
+
+    searchableFields.add("descricao");
   }
 
   @Override

@@ -15,9 +15,6 @@ public class TransacaoList extends BaseList<TipoTransacao> {
   TransacaoForm form;
   public TransacaoList(IRepositorioGeral<TipoTransacao> repo) {
     super(repo, "Tipos de Transação");
-    search("cliente", "descricao");
-    populateTableModel();
-    updateTable();
   }
 
   @Override
@@ -30,6 +27,9 @@ public class TransacaoList extends BaseList<TipoTransacao> {
     for (int i = 0; i < labels.size(); i++) {
       tableConfig.addColumnConfig(new TableColumnConfig(names.get(i), labels.get(i), widths.get(i)));
     }
+  
+    searchableFields.add("descricao");
+    
   }
 
   @Override

@@ -44,7 +44,6 @@ public class TransacaoForm extends BaseForm<TipoTransacao> {
   @Override
   public void onCreate(Map<String, ?> data) throws BuilderValidationException {
     super.onUpdate(data);
-    System.out.println("OnUpdate");
     TransacaoBuilder builder = new TransacaoBuilder()
         .withTipo(data.get("tipo") == "Receita" ? TipoDespesaReceita.RECEITA : TipoDespesaReceita.DESPESA)
         .withDescricao((String) data.get("descricao"));

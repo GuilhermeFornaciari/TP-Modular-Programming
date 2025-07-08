@@ -56,6 +56,7 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
 
   //Search
   protected JTextField searchTextField = new JTextField();
+  protected ArrayList<String> searchableFields = new ArrayList<>();  
 
   // Repo
   public IRepositorioGeral<T> repo;
@@ -100,13 +101,13 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
       BorderFactory.createEmptyBorder(0, 10, 0, 10),
       BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GRAY)
     ));
-    // searchTextField.getDocument().addDocumentListener(new DocumentListener() {
-    //   public void changedUpdate(DocumentEvent e) {
-    //     warn();
-    //   }
+    searchTextField.getDocument().addDocumentListener(new DocumentListener() {
+      public void changedUpdate(DocumentEvent e) {search(searchTextField.getText(), searchableFields);}
+      public void insertUpdate(DocumentEvent e) {search(searchTextField.getText(), searchableFields);}
+      public void removeUpdate(DocumentEvent e) {search(searchTextField.getText(), searchableFields);}
 
-    // });
-    // headerPanel.add(searchTextField, BorderLayout.CENTER);
+    });
+    headerPanel.add(searchTextField, BorderLayout.CENTER);
 
     RoundedButton createButton = new RoundedButton("+", 10, 30, 30, new Color(0x193CB8), new Color(0x193CB8).darker(),
         Color.WHITE, Color.WHITE);
@@ -287,21 +288,36 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
     tableData = repo.pegar_todos();
   }
 
-  public void search(String query, String searchField) {
+  public void search(String query, ArrayList<String> searchFields) {
+    if (query == null || query.isEmpty()) {
+      getTableData();
+      populateTableModel();
+      updateTable();
+    }
     ArrayList<T> filtered = new ArrayList<>();
     for (T item: tableData) {
       Object value = null;
-      try {
-        value = item.getProperty(searchField);
-      } catch (Exception e) { 
-        e.printStackTrace();
+      boolean match = false;
+      for (String searchField: searchFields) {
+        try {
+          value = item.getProperty(searchField);
+          if (value instanceof Cliente cliente) {
+            value = cliente.getNome();
+          } else if (value instanceof TipoTransacao tipoTransacao) {
+            value = tipoTransacao.getDescricao();
+          }
+          if (value != null && value.toString().toLowerCase().contains(query.toLowerCase())) {
+            match = true;
+          } 
+        } catch (Exception e) { 
+          e.printStackTrace();
+        }
       }
-
-      if (value != null && value.toString().toLowerCase().contains(query.toLowerCase())) {
-        filtered.add(item);
-      } 
+      if (match) filtered.add(item);
     }
     tableData = filtered;
+    populateTableModel();
+    updateTable();
   }  
 
   public class NonEditableTableModel extends DefaultTableModel {
@@ -345,7 +361,6 @@ public abstract class BaseList<T extends Entidade> extends JPanel implements Act
 
   @Override
   public void onNotify(ObservableAction action) {
-    System.out.println("ON NOTIFY");
     if (action == ObservableAction.DELETE)
       return;
     getTableData();

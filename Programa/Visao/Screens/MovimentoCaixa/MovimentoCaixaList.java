@@ -36,6 +36,9 @@ public class MovimentoCaixaList extends BaseList<MovimentoCaixa> {
     for (int i = 0; i < labels.size(); i++) {
       tableConfig.addColumnConfig(new TableColumnConfig(names.get(i), labels.get(i), widths.get(i)));
     }
+
+    searchableFields.add("cliente");
+
   }
 
   @Override

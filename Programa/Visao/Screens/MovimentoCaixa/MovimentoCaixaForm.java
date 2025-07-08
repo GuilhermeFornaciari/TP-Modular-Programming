@@ -86,6 +86,13 @@ public class MovimentoCaixaForm extends BaseForm<MovimentoCaixa> {
       builder.withDataCriacao(null);
     }
 
+    try {
+      MovimentoCaixa movimentoCaixa = repo.pegar_um(Integer.parseInt(tempData.get("id")));
+      builder.withItemMovimentos(movimentoCaixa.getItemMovimentos());
+    } catch (Exception e ){
+      builder.withItemMovimentos(null);
+    }
+    
     MovimentoCaixa updatingData = builder.build();
     try {
       this.repo.atualizar(updatingData);

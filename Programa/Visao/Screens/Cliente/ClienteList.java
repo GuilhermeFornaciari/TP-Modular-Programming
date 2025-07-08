@@ -34,6 +34,11 @@ public class ClienteList extends BaseList<Cliente> {
       tableConfig.addColumnConfig(new TableColumnConfig(names.get(i), labels.get(i), widths.get(i)));
     }
 
+    searchableFields.add("CPF");
+    searchableFields.add("Nome");
+    searchableFields.add("Email");
+    searchableFields.add("CEP");
+
   }
 
   @Override
