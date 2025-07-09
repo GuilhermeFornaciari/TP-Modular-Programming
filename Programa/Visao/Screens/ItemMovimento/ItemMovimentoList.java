@@ -73,11 +73,12 @@ public class ItemMovimentoList extends BaseList<ItemMovimento> {
 
       MovimentoCaixa movimentoCaixa = movimentoCaixaRepo.pegar_um(idMovimentoCaixa);
       for (ItemMovimento item : movimentoCaixa.getItemMovimentos()) {
-        if (item.getId().equals(button.getItemId()))
-          ;
-        itemMovimento = item;
+        if (item.getId().equals(button.getItemId())) {
+          itemMovimento = item;
+        }
       }
 
+      System.out.println(button.getItemId());
       if (itemMovimento == null)
         return;
 
